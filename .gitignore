@@ -9,3 +9,7 @@ __pycache__/
 dist/
 build/
 *.egg-info/
+
+# Experiment artifacts
+final_model.pt
+*.pt

@@ -1,4 +1,4 @@
-"""pytorchexample: A Flower / PyTorch app."""
+"""fl_security_benchmark: A Flower / PyTorch app."""
 
 import torch
 import torch.nn as nn

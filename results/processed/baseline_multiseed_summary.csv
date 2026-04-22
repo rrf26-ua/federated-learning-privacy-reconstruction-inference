@@ -1,0 +1,4 @@
+experiment_id,seed,round0_acc,round1_acc,round2_acc,round3_acc,round0_loss,round1_loss,round2_loss,round3_loss,train_loss_r1,train_loss_r2,train_loss_r3,eval_acc_r1,eval_acc_r2,eval_acc_r3,eval_loss_r1,eval_loss_r2,eval_loss_r3,execution_time_s,notes
+baseline_flower_pytorch_cifar10,42,,,,,,,,,,,,,,,,,,,
+baseline_flower_pytorch_cifar10,43,,,,,,,,,,,,,,,,,,,
+baseline_flower_pytorch_cifar10,44,,,,,,,,,,,,,,,,,,,

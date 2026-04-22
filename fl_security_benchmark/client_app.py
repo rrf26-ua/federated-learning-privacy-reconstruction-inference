@@ -7,37 +7,42 @@ from flwr.clientapp import ClientApp
 from fl_security_benchmark.task import Net, load_data
 from fl_security_benchmark.task import test as test_fn
 from fl_security_benchmark.task import train as train_fn
+from fl_security_benchmark.utils.reproducibility import set_seed
 
-# Flower ClientApp
 app = ClientApp()
 
 
 @app.train()
 def train(msg: Message, context: Context):
     """Train the model on local data."""
+    partition_id = int(context.node_config["partition-id"])
+    num_partitions = int(context.node_config["num-partitions"])
+    batch_size = int(context.run_config["batch-size"])
+    base_seed = int(context.run_config["seed"])
+    client_seed = base_seed + partition_id
 
-    # Load the model and initialize it with the received weights
+    set_seed(client_seed)
+
     model = Net()
     model.load_state_dict(msg.content["arrays"].to_torch_state_dict())
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model.to(device)
 
-    # Load the data
-    partition_id = context.node_config["partition-id"]
-    num_partitions = context.node_config["num-partitions"]
-    batch_size = context.run_config["batch-size"]
-    trainloader, _ = load_data(partition_id, num_partitions, batch_size)
+    trainloader, _ = load_data(
+        partition_id=partition_id,
+        num_partitions=num_partitions,
+        batch_size=batch_size,
+        seed=client_seed,
+    )
 
-    # Call the training function
     train_loss = train_fn(
         model,
         trainloader,
-        context.run_config["local-epochs"],
-        msg.content["config"]["lr"],
+        int(context.run_config["local-epochs"]),
+        float(msg.content["config"]["lr"]),
         device,
     )
 
-    # Construct and return reply Message
     model_record = ArrayRecord(model.state_dict())
     metrics = {
         "train_loss": train_loss,
@@ -51,27 +56,28 @@ def train(msg: Message, context: Context):
 @app.evaluate()
 def evaluate(msg: Message, context: Context):
     """Evaluate the model on local data."""
+    partition_id = int(context.node_config["partition-id"])
+    num_partitions = int(context.node_config["num-partitions"])
+    batch_size = int(context.run_config["batch-size"])
+    base_seed = int(context.run_config["seed"])
+    client_seed = base_seed + partition_id
 
-    # Load the model and initialize it with the received weights
+    set_seed(client_seed)
+
     model = Net()
     model.load_state_dict(msg.content["arrays"].to_torch_state_dict())
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model.to(device)
 
-    # Load the data
-    partition_id = context.node_config["partition-id"]
-    num_partitions = context.node_config["num-partitions"]
-    batch_size = context.run_config["batch-size"]
-    _, valloader = load_data(partition_id, num_partitions, batch_size)
-
-    # Call the evaluation function
-    eval_loss, eval_acc = test_fn(
-        model,
-        valloader,
-        device,
+    _, valloader = load_data(
+        partition_id=partition_id,
+        num_partitions=num_partitions,
+        batch_size=batch_size,
+        seed=client_seed,
     )
 
-    # Construct and return reply Message
+    eval_loss, eval_acc = test_fn(model, valloader, device)
+
     metrics = {
         "eval_loss": eval_loss,
         "eval_acc": eval_acc,

@@ -1,0 +1,4 @@
+experiment_id,date_utc,strategy,num_clients,num_rounds,learning_rate,local_epochs,batch_size,seed,status,best_global_accuracy,best_round,notes,log_path
+baseline_r20_lr001_le1_bs32_seed42,2026-04-27,FedAvg,4,20,0.01,1,32,42,failed_dataset_download,,,"Failed before round 0: huggingface dataset download blocked by proxy (403 Forbidden)",results/raw/exp_baseline_r20_lr001_le1_bs32_seed42.log
+exp_lr0008_r20_le1_bs32_seed42,2026-04-27,FedAvg,4,20,0.008,1,32,42,failed_dataset_download,,,"Same failure point as baseline; no train/eval rounds executed",results/raw/exp_lr0008_r20_le1_bs32_seed42.log
+exp_r20_lr001_le2_bs32_seed42,2026-04-27,FedAvg,4,20,0.01,2,32,42,failed_dataset_download,,,"Same failure point as baseline; no train/eval rounds executed",results/raw/exp_le2_r20_lr001_bs32_seed42.log

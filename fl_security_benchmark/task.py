@@ -1,52 +1,91 @@
-"""fl_security_benchmark: A Flower / PyTorch app."""
+"""Federated CIFAR-10 task using a ResNet-18 model adapted for Flower."""
 
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 from datasets import load_dataset
 from flwr_datasets import FederatedDataset
 from flwr_datasets.partitioner import IidPartitioner
 from torch.utils.data import DataLoader
-from torchvision.transforms import Compose, Normalize, ToTensor
+from torchvision.models import resnet18
+from torchvision.transforms import (
+    Compose,
+    Normalize,
+    RandomCrop,
+    RandomHorizontalFlip,
+    ToTensor,
+)
+
+
+DATALOADER_NUM_WORKERS = 0
+PIN_MEMORY = False
 
 
 class Net(nn.Module):
-    """Model (simple CNN adapted from 'PyTorch: A 60 Minute Blitz')."""
+    """ResNet-18 adapted for CIFAR-10 32x32 RGB images."""
 
     def __init__(self):
-        super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(3, 6, 5)
-        self.pool = nn.MaxPool2d(2, 2)
-        self.conv2 = nn.Conv2d(6, 16, 5)
-        self.fc1 = nn.Linear(16 * 5 * 5, 120)
-        self.fc2 = nn.Linear(120, 84)
-        self.fc3 = nn.Linear(84, 10)
+        super().__init__()
+        self.model = resnet18(weights=None, num_classes=10)
+
+        # Original ResNet-18 is designed for ImageNet 224x224 images.
+        # CIFAR-10 images are 32x32, so use a 3x3 stride-1 conv and remove maxpool.
+        self.model.conv1 = nn.Conv2d(
+            in_channels=3,
+            out_channels=64,
+            kernel_size=3,
+            stride=1,
+            padding=1,
+            bias=False,
+        )
+        self.model.maxpool = nn.Identity()
 
     def forward(self, x):
-        x = self.pool(F.relu(self.conv1(x)))
-        x = self.pool(F.relu(self.conv2(x)))
-        x = x.view(-1, 16 * 5 * 5)
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        return self.fc3(x)
+        return self.model(x)
 
 
 fds = None  # Cache FederatedDataset
 
-pytorch_transforms = Compose(
-    [ToTensor(), Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
+
+train_transforms = Compose(
+    [
+        RandomCrop(32, padding=4),
+        RandomHorizontalFlip(),
+        ToTensor(),
+        Normalize(
+            mean=(0.4914, 0.4822, 0.4465),
+            std=(0.2470, 0.2435, 0.2616),
+        ),
+    ]
 )
 
 
-def apply_transforms(batch):
-    """Apply transforms to the partition from FederatedDataset."""
-    batch["img"] = [pytorch_transforms(img) for img in batch["img"]]
+test_transforms = Compose(
+    [
+        ToTensor(),
+        Normalize(
+            mean=(0.4914, 0.4822, 0.4465),
+            std=(0.2470, 0.2435, 0.2616),
+        ),
+    ]
+)
+
+
+def apply_train_transforms(batch):
+    """Apply training transforms to a batch."""
+    batch["img"] = [train_transforms(img) for img in batch["img"]]
+    return batch
+
+
+def apply_test_transforms(batch):
+    """Apply validation/test transforms to a batch."""
+    batch["img"] = [test_transforms(img) for img in batch["img"]]
     return batch
 
 
 def load_data(partition_id: int, num_partitions: int, batch_size: int, seed: int):
-    """Load partition CIFAR-10 data with deterministic split/shuffle."""
+    """Load one CIFAR-10 client partition and return train/validation loaders."""
     global fds
+
     if fds is None:
         partitioner = IidPartitioner(num_partitions=num_partitions)
         fds = FederatedDataset(
@@ -55,70 +94,109 @@ def load_data(partition_id: int, num_partitions: int, batch_size: int, seed: int
         )
 
     partition = fds.load_partition(partition_id)
-
     partition_train_test = partition.train_test_split(test_size=0.2, seed=seed)
-    partition_train_test = partition_train_test.with_transform(apply_transforms)
+
+    train_dataset = partition_train_test["train"].with_transform(
+        apply_train_transforms
+    )
+    test_dataset = partition_train_test["test"].with_transform(
+        apply_test_transforms
+    )
 
     train_generator = torch.Generator()
     train_generator.manual_seed(seed)
 
     trainloader = DataLoader(
-        partition_train_test["train"],
+        train_dataset,
         batch_size=batch_size,
         shuffle=True,
         generator=train_generator,
+        num_workers=DATALOADER_NUM_WORKERS,
+        pin_memory=PIN_MEMORY,
     )
+
     testloader = DataLoader(
-        partition_train_test["test"],
+        test_dataset,
         batch_size=batch_size,
         shuffle=False,
+        num_workers=DATALOADER_NUM_WORKERS,
+        pin_memory=PIN_MEMORY,
     )
+
     return trainloader, testloader
 
 
 def load_centralized_dataset():
-    """Load full centralized test set and return dataloader."""
+    """Load the full CIFAR-10 test split and return a dataloader."""
     test_dataset = load_dataset("uoft-cs/cifar10", split="test")
-    dataset = test_dataset.with_format("torch").with_transform(apply_transforms)
-    return DataLoader(dataset, batch_size=128, shuffle=False)
+    test_dataset = test_dataset.with_transform(apply_test_transforms)
+
+    return DataLoader(
+        test_dataset,
+        batch_size=64,
+        shuffle=False,
+        num_workers=DATALOADER_NUM_WORKERS,
+        pin_memory=PIN_MEMORY,
+    )
 
 
 def train(net, trainloader, epochs, lr, device):
-    """Train the model on the training set."""
+    """Train the model on the local client training set."""
     net.to(device)
     criterion = torch.nn.CrossEntropyLoss().to(device)
-    optimizer = torch.optim.SGD(net.parameters(), lr=lr, momentum=0.9)
+    optimizer = torch.optim.SGD(
+        net.parameters(),
+        lr=lr,
+        momentum=0.9,
+        weight_decay=5e-4,
+    )
+
     net.train()
     running_loss = 0.0
+    num_batches = 0
 
     for _ in range(epochs):
         for batch in trainloader:
             images = batch["img"].to(device)
             labels = batch["label"].to(device)
+
             optimizer.zero_grad()
-            loss = criterion(net(images), labels)
+            outputs = net(images)
+            loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
-            running_loss += loss.item()
 
-    avg_trainloss = running_loss / (epochs * len(trainloader))
-    return avg_trainloss
+            running_loss += loss.item()
+            num_batches += 1
+
+    return running_loss / max(num_batches, 1)
 
 
 def test(net, testloader, device):
-    """Validate the model on the test set."""
+    """Evaluate the model on a validation/test set."""
     net.to(device)
-    criterion = torch.nn.CrossEntropyLoss()
-    correct, loss = 0, 0.0
+    criterion = torch.nn.CrossEntropyLoss().to(device)
+    net.eval()
+
+    correct = 0
+    total = 0
+    loss = 0.0
+    num_batches = 0
 
     with torch.no_grad():
         for batch in testloader:
             images = batch["img"].to(device)
             labels = batch["label"].to(device)
-            outputs = net(images)
-            loss += criterion(outputs, labels).item()
-            correct += (torch.max(outputs.data, 1)[1] == labels).sum().item()
 
-    accuracy = correct / len(testloader.dataset)
-    loss = loss / len(testloader)
-    return loss, accuracy
+            outputs = net(images)
+            batch_loss = criterion(outputs, labels)
+
+            loss += batch_loss.item()
+            num_batches += 1
+            predicted = torch.max(outputs.data, 1)[1]
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+
+    accuracy = correct / total
+    avg_loss = loss / max(num_batches, 1)
+    return avg_loss, accuracy

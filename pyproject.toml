@@ -27,9 +27,10 @@ serverapp = "fl_security_benchmark.server_app:app"
 clientapp = "fl_security_benchmark.client_app:app"
 
 [tool.flwr.app.config]
-num-server-rounds = 3
-fraction-evaluate = 0.5
-local-epochs = 1
-learning-rate = 0.1
+num-server-rounds = 20
+fraction-train = 1.0
+fraction-evaluate = 0.0
+local-epochs = 10
+learning-rate = 0.02
 batch-size = 32
 seed = 42

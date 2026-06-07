@@ -13,3 +13,5 @@ build/
 # Experiment artifacts
 final_model.pt
 *.pt
+final_model.pt
+*.pt

@@ -18,7 +18,7 @@ This experiment studies visual reconstruction leakage when the observed gradient
 - Total variation weight: 0.001
 - Seed: 42
 - Device: cuda:0
-- Batch sizes evaluated: 1, 2, 4
+- Batch sizes evaluated: 1, 2, 4, 8
 - Labels: true labels are provided to the attacker in this controlled experiment
 
 ## Results
@@ -28,39 +28,16 @@ This experiment studies visual reconstruction leakage when the observed gradient
 | 1 | 0 | airplane | 0.0188 | 17.25 |
 | 2 | 0, 1 | airplane, frog | 0.0624 | 12.05 |
 | 4 | 0, 1, 2, 3 | airplane, frog, airplane, bird | 0.0966 | 10.15 |
-
-## Per-sample results
-
-### Batch size 1
-
-| Sample | Label | MSE | PSNR |
-|---:|---|---:|---:|
-| 0 | airplane | 0.0188 | 17.25 |
-
-### Batch size 2
-
-| Sample | Label | MSE | PSNR |
-|---:|---|---:|---:|
-| 0 | airplane | 0.0221 | 16.55 |
-| 1 | frog | 0.1027 | 9.89 |
-
-### Batch size 4
-
-| Sample | Label | MSE | PSNR |
-|---:|---|---:|---:|
-| 0 | airplane | 0.0589 | 12.30 |
-| 1 | frog | 0.1156 | 9.37 |
-| 2 | airplane | 0.0777 | 11.10 |
-| 3 | bird | 0.1342 | 8.72 |
+| 8 | 0, 1, 2, 3, 4, 5, 6, 7 | airplane, frog, airplane, bird, horse, bird, automobile, bird | 0.0831 | 10.81 |
 
 ## Interpretation
 
-The results show a clear degradation in reconstruction quality as batch size increases. With batch size 1, the attack obtains the best reconstruction quality. With batch size 2, the global MSE increases and PSNR drops substantially. With batch size 4, the reconstruction becomes significantly more degraded and mixed.
+The results show a clear degradation in reconstruction quality when moving from batch size 1 to larger batches. With batch size 1, the attack obtains the best individual reconstruction quality. With batch sizes 2, 4 and 8, the reconstruction becomes substantially noisier and less useful for identifying individual samples.
 
-This supports the hypothesis that gradients computed from larger batches leak less precise information about individual samples because the signal from several images is mixed. However, this does not eliminate privacy leakage completely: even in larger batches, some dominant colors and approximate visual structures may still appear.
+The degradation is not perfectly monotonic: batch size 8 obtains a slightly better global PSNR than batch size 4. This does not invalidate the main conclusion, because both batch sizes produce much poorer reconstructions than batch size 1. The difference can be explained by the non-convex nature of the optimization problem, the specific samples included in each batch, and the fact that global metrics can hide per-sample variation.
 
 This experiment uses true labels during reconstruction. Therefore, it isolates the effect of batch size on visual reconstruction and does not yet evaluate the harder problem of multi-label inference from batch gradients.
 
 ## Conclusion
 
-Increasing the batch size acts as a partial privacy mitigation against individual image reconstruction, but it is not a complete defense. The attacker still receives enough information to produce noisy aggregate reconstructions and, in some cases, partial visual cues.
+Increasing the batch size acts as a partial privacy mitigation against individual image reconstruction, but it is not a complete defense. Larger batches reduce the clarity of individual reconstructions, while still allowing noisy aggregate visual information to leak.

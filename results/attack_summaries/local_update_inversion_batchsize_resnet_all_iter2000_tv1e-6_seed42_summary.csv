@@ -1,0 +1,4 @@
+batch_size,sample_indices,labels,grad_scope,iterations,local_lr,weight_decay,attack_lr,tv_weight,best_update_mse,best_update_psnr,best_oracle_mse,best_oracle_psnr,final_mse,final_psnr,elapsed_seconds,visual_observation
+1,"0","airplane",all,2000,0.02,0.0005,0.03,0.000001,0.018245665356516838,17.388402947879598,0.01819773204624653,17.399827340574948,0.018195131793618202,17.40044794321558,70.76481699943542,"Best reconstruction; label inferred from the local update; dominant structure visible."
+2,"0,1","airplane,frog",all,2000,0.02,0.0005,0.03,0.000001,0.07692947,11.14,0.07674690,11.15,0.07674039,11.15,71.32,"Substantially degraded reconstruction; mixed visual information from two samples."
+4,"0,1,2,3","airplane,frog,airplane,bird",all,2000,0.02,0.0005,0.03,0.000001,0.09634335,10.16,0.09608255,10.17,0.09607997,10.17,76.48,"Weak reconstruction; individual samples are strongly mixed and noisy."

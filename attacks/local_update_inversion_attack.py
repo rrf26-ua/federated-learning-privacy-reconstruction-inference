@@ -49,22 +49,28 @@ CIFAR10_STD = torch.tensor([0.2470, 0.2435, 0.2616]).view(1, 3, 1, 1)
 
 
 def set_seed(seed: int) -> None:
+    """Set reproducibility seeds."""
     random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
 
 
 def normalize_cifar10(x: torch.Tensor) -> torch.Tensor:
+    """Normalize CIFAR-10 image tensor in [0, 1]."""
     mean = CIFAR10_MEAN.to(x.device)
     std = CIFAR10_STD.to(x.device)
     return (x - mean) / std
 
 
 def mse_value(original: torch.Tensor, reconstructed: torch.Tensor) -> float:
-    return torch.mean((original.detach().cpu() - reconstructed.detach().cpu()) ** 2).item()
+    """Compute MSE between two tensors."""
+    return torch.mean(
+        (original.detach().cpu() - reconstructed.detach().cpu()) ** 2
+    ).item()
 
 
 def psnr_value(original: torch.Tensor, reconstructed: torch.Tensor) -> float:
+    """Compute PSNR between two image tensors in [0, 1]."""
     value = mse_value(original, reconstructed)
     if value == 0:
         return float("inf")
@@ -72,11 +78,18 @@ def psnr_value(original: torch.Tensor, reconstructed: torch.Tensor) -> float:
 
 
 def save_json(path: Path, data: dict) -> None:
+    """Save dictionary as JSON."""
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2), encoding="utf-8")
 
 
-def load_cifar10_batch(sample_start: int, batch_size: int, split: str, device: torch.device):
+def load_cifar10_batch(
+    sample_start: int,
+    batch_size: int,
+    split: str,
+    device: torch.device,
+):
+    """Load a consecutive CIFAR-10 batch."""
     dataset = load_dataset("uoft-cs/cifar10", split=split)
     to_tensor = ToTensor()
 
@@ -98,13 +111,22 @@ def load_cifar10_batch(sample_start: int, batch_size: int, split: str, device: t
 
 
 def select_parameters(model: torch.nn.Module, grad_scope: str):
-    named_params = [(name, param) for name, param in model.named_parameters() if param.requires_grad]
+    """Select parameters used to compute/match the update."""
+    named_params = [
+        (name, param)
+        for name, param in model.named_parameters()
+        if param.requires_grad
+    ]
 
     if grad_scope == "all":
         return named_params
 
     if grad_scope == "fc":
-        selected = [(name, param) for name, param in named_params if "fc" in name]
+        selected = [
+            (name, param)
+            for name, param in named_params
+            if "fc" in name
+        ]
         if not selected:
             raise RuntimeError("No fully-connected layer parameters found.")
         return selected
@@ -112,16 +134,37 @@ def select_parameters(model: torch.nn.Module, grad_scope: str):
     raise ValueError(f"Unknown grad_scope: {grad_scope}")
 
 
-def compute_gradients(model, criterion, x, y, named_params, create_graph: bool):
+def compute_gradients(
+    model: torch.nn.Module,
+    criterion: torch.nn.Module,
+    x: torch.Tensor,
+    y: torch.Tensor,
+    named_params,
+    create_graph: bool,
+):
+    """Compute gradients of the loss with respect to selected parameters."""
     params = [param for _, param in named_params]
     model.zero_grad(set_to_none=True)
+
     outputs = model(x)
     loss = criterion(outputs, y)
-    grads = torch.autograd.grad(loss, params, create_graph=create_graph)
+
+    grads = torch.autograd.grad(
+        loss,
+        params,
+        create_graph=create_graph,
+        retain_graph=create_graph,
+    )
+
     return loss, grads
 
 
-def gradients_to_sgd_deltas(named_params, grads, local_lr: float, weight_decay: float):
+def gradients_to_sgd_deltas(
+    named_params,
+    grads,
+    local_lr: float,
+    weight_decay: float,
+):
     """Convert gradients into one-step SGD deltas.
 
     For one SGD step without previous momentum:
@@ -132,12 +175,15 @@ def gradients_to_sgd_deltas(named_params, grads, local_lr: float, weight_decay: 
     Therefore:
 
         delta = -lr * (grad + weight_decay * theta_before)
+
+    The parameter term is detached because the attack optimizes the dummy input,
+    not the model parameters.
     """
     deltas = []
 
     for (_, param), grad in zip(named_params, grads):
         if weight_decay > 0:
-            delta = -local_lr * (grad + weight_decay * param)
+            delta = -local_lr * (grad + weight_decay * param.detach())
         else:
             delta = -local_lr * grad
         deltas.append(delta)
@@ -145,7 +191,12 @@ def gradients_to_sgd_deltas(named_params, grads, local_lr: float, weight_decay: 
     return deltas
 
 
-def infer_label_from_fc_bias_delta(named_params, observed_deltas, local_lr: float, weight_decay: float):
+def infer_label_from_fc_bias_delta(
+    named_params,
+    observed_deltas,
+    local_lr: float,
+    weight_decay: float,
+):
     """Infer label for batch size 1 from the final layer bias update.
 
     This recovers the bias gradient from the observed delta and applies the
@@ -157,19 +208,52 @@ def infer_label_from_fc_bias_delta(named_params, observed_deltas, local_lr: floa
             if weight_decay > 0:
                 recovered_grad = recovered_grad - weight_decay * param.detach()
             return int(torch.argmin(recovered_grad).item())
+
     return None
 
 
 def total_variation(x: torch.Tensor) -> torch.Tensor:
+    """Compute simple total variation regularization."""
     tv_h = torch.mean(torch.abs(x[:, :, 1:, :] - x[:, :, :-1, :]))
     tv_w = torch.mean(torch.abs(x[:, :, :, 1:] - x[:, :, :, :-1]))
     return tv_h + tv_w
 
 
-def run_attack(args):
+def build_per_sample_metrics(
+    original_pixels: torch.Tensor,
+    reconstructed_pixels: torch.Tensor,
+    labels: list[int],
+    label_names: list[str],
+    sample_indices: list[int],
+):
+    """Build per-sample MSE/PSNR metrics."""
+    rows = []
+
+    for local_idx, sample_idx in enumerate(sample_indices):
+        original_one = original_pixels[local_idx : local_idx + 1]
+        reconstructed_one = reconstructed_pixels[local_idx : local_idx + 1]
+
+        rows.append(
+            {
+                "sample_index": sample_idx,
+                "true_label": labels[local_idx],
+                "true_label_name": label_names[local_idx],
+                "mse": mse_value(original_one, reconstructed_one),
+                "psnr": psnr_value(original_one, reconstructed_one),
+            }
+        )
+
+    return rows
+
+
+def run_attack(args) -> None:
+    """Run the controlled local update inversion attack."""
     set_seed(args.seed)
 
-    device = torch.device(args.device if args.device else ("cuda:0" if torch.cuda.is_available() else "cpu"))
+    device = torch.device(
+        args.device if args.device else ("cuda:0" if torch.cuda.is_available() else "cpu")
+    )
+
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -180,7 +264,13 @@ def run_attack(args):
     print(f"[INFO] Local LR used to generate update: {args.local_lr}")
     print(f"[INFO] Weight decay used to generate update: {args.weight_decay}")
 
-    original_pixels, original_input, labels_tensor, labels, sample_indices = load_cifar10_batch(
+    (
+        original_pixels,
+        original_input,
+        labels_tensor,
+        labels,
+        sample_indices,
+    ) = load_cifar10_batch(
         sample_start=args.sample_start,
         batch_size=args.batch_size,
         split=args.split,
@@ -233,19 +323,37 @@ def run_attack(args):
             weight_decay=args.weight_decay,
         )
         if inferred_label is not None:
-            print(f"[INFO] Label inferred from update: {inferred_label} ({CIFAR10_CLASSES[inferred_label]})")
+            print(
+                f"[INFO] Label inferred from update: "
+                f"{inferred_label} ({CIFAR10_CLASSES[inferred_label]})"
+            )
 
     print("[INFO] Using true labels for reconstruction in this controlled update attack.")
 
-    dummy_logits = torch.randn_like(original_pixels, device=device, requires_grad=True)
+    dummy_logits = torch.randn_like(
+        original_pixels,
+        device=device,
+        requires_grad=True,
+    )
+
     optimizer = torch.optim.Adam([dummy_logits], lr=args.attack_lr)
 
     nrow = args.nrow if args.nrow > 0 else args.batch_size
-    save_image(original_pixels.detach().cpu(), output_dir / "original_grid.png", nrow=nrow)
+    save_image(
+        original_pixels.detach().cpu(),
+        output_dir / "original_grid.png",
+        nrow=nrow,
+    )
 
     start_time = time.time()
+
     best_update_loss = float("inf")
-    best_reconstructed = None
+    best_update_reconstructed = None
+    best_update_iteration = None
+
+    best_oracle_mse = float("inf")
+    best_oracle_reconstructed = None
+    best_oracle_iteration = None
 
     for iteration in range(1, args.iterations + 1):
         reconstructed_pixels = torch.sigmoid(dummy_logits)
@@ -279,13 +387,19 @@ def run_attack(args):
         optimizer.step()
 
         current_update_loss = float(update_loss.detach().cpu().item())
+        current_mse = mse_value(original_pixels, reconstructed_pixels)
 
         if current_update_loss < best_update_loss:
             best_update_loss = current_update_loss
-            best_reconstructed = reconstructed_pixels.detach().clone()
+            best_update_reconstructed = reconstructed_pixels.detach().clone()
+            best_update_iteration = iteration
+
+        if current_mse < best_oracle_mse:
+            best_oracle_mse = current_mse
+            best_oracle_reconstructed = reconstructed_pixels.detach().clone()
+            best_oracle_iteration = iteration
 
         if iteration % args.log_every == 0 or iteration == 1:
-            current_mse = mse_value(original_pixels, reconstructed_pixels)
             current_psnr = psnr_value(original_pixels, reconstructed_pixels)
             print(
                 f"[ITER {iteration:04d}] "
@@ -304,24 +418,65 @@ def run_attack(args):
 
     elapsed = time.time() - start_time
 
-    if best_reconstructed is None:
-        best_reconstructed = torch.sigmoid(dummy_logits).detach()
+    final_reconstructed = torch.sigmoid(dummy_logits).detach()
 
-    save_image(best_reconstructed.detach().cpu(), output_dir / "reconstructed_grid.png", nrow=nrow)
+    if best_update_reconstructed is None:
+        best_update_reconstructed = final_reconstructed
+        best_update_iteration = args.iterations
 
-    per_sample = []
-    for local_idx, sample_idx in enumerate(sample_indices):
-        original_one = original_pixels[local_idx : local_idx + 1]
-        reconstructed_one = best_reconstructed[local_idx : local_idx + 1]
-        per_sample.append(
-            {
-                "sample_index": sample_idx,
-                "true_label": labels[local_idx],
-                "true_label_name": label_names[local_idx],
-                "mse": mse_value(original_one, reconstructed_one),
-                "psnr": psnr_value(original_one, reconstructed_one),
-            }
-        )
+    if best_oracle_reconstructed is None:
+        best_oracle_reconstructed = final_reconstructed
+        best_oracle_mse = mse_value(original_pixels, final_reconstructed)
+        best_oracle_iteration = args.iterations
+
+    save_image(
+        best_update_reconstructed.detach().cpu(),
+        output_dir / "reconstructed_best_update.png",
+        nrow=nrow,
+    )
+
+    save_image(
+        best_oracle_reconstructed.detach().cpu(),
+        output_dir / "reconstructed_best_oracle_mse.png",
+        nrow=nrow,
+    )
+
+    save_image(
+        final_reconstructed.detach().cpu(),
+        output_dir / "reconstructed_final.png",
+        nrow=nrow,
+    )
+
+    # Backward-compatible name used by previous experiments.
+    save_image(
+        best_update_reconstructed.detach().cpu(),
+        output_dir / "reconstructed_grid.png",
+        nrow=nrow,
+    )
+
+    per_sample_best_update = build_per_sample_metrics(
+        original_pixels=original_pixels,
+        reconstructed_pixels=best_update_reconstructed,
+        labels=labels,
+        label_names=label_names,
+        sample_indices=sample_indices,
+    )
+
+    per_sample_best_oracle = build_per_sample_metrics(
+        original_pixels=original_pixels,
+        reconstructed_pixels=best_oracle_reconstructed,
+        labels=labels,
+        label_names=label_names,
+        sample_indices=sample_indices,
+    )
+
+    per_sample_final = build_per_sample_metrics(
+        original_pixels=original_pixels,
+        reconstructed_pixels=final_reconstructed,
+        labels=labels,
+        label_names=label_names,
+        sample_indices=sample_indices,
+    )
 
     metrics = {
         "attack": "local_update_inversion",
@@ -342,12 +497,23 @@ def run_attack(args):
         "label_names": label_names,
         "uses_true_labels": True,
         "inferred_label_from_update": inferred_label,
-        "inferred_label_from_update_name": CIFAR10_CLASSES[inferred_label] if inferred_label is not None else None,
+        "inferred_label_from_update_name": (
+            CIFAR10_CLASSES[inferred_label] if inferred_label is not None else None
+        ),
         "true_loss": float(true_loss.detach().cpu().item()),
         "best_update_loss": best_update_loss,
-        "final_mse": mse_value(original_pixels, best_reconstructed),
-        "final_psnr": psnr_value(original_pixels, best_reconstructed),
-        "per_sample": per_sample,
+        "best_update_iteration": best_update_iteration,
+        "best_update_mse": mse_value(original_pixels, best_update_reconstructed),
+        "best_update_psnr": psnr_value(original_pixels, best_update_reconstructed),
+        "best_oracle_iteration": best_oracle_iteration,
+        "best_oracle_mse": best_oracle_mse,
+        "best_oracle_psnr": psnr_value(original_pixels, best_oracle_reconstructed),
+        "final_mse": mse_value(original_pixels, final_reconstructed),
+        "final_psnr": psnr_value(original_pixels, final_reconstructed),
+        "per_sample": per_sample_best_update,
+        "per_sample_best_update": per_sample_best_update,
+        "per_sample_best_oracle": per_sample_best_oracle,
+        "per_sample_final": per_sample_final,
         "elapsed_seconds": elapsed,
         "device": str(device),
     }
@@ -356,13 +522,19 @@ def run_attack(args):
 
     print("[INFO] Local update inversion attack finished.")
     print(f"[INFO] Output directory: {output_dir}")
+    print(f"[INFO] Best-update MSE: {metrics['best_update_mse']:.6e}")
+    print(f"[INFO] Best-update PSNR: {metrics['best_update_psnr']:.2f}")
+    print(f"[INFO] Best-oracle MSE: {metrics['best_oracle_mse']:.6e}")
+    print(f"[INFO] Best-oracle PSNR: {metrics['best_oracle_psnr']:.2f}")
     print(f"[INFO] Final MSE: {metrics['final_mse']:.6e}")
     print(f"[INFO] Final PSNR: {metrics['final_psnr']:.2f}")
     print(f"[INFO] Elapsed seconds: {elapsed:.2f}")
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Controlled local update inversion attack on CIFAR-10.")
+    parser = argparse.ArgumentParser(
+        description="Controlled local update inversion attack on CIFAR-10."
+    )
 
     parser.add_argument("--sample-start", type=int, default=0)
     parser.add_argument("--batch-size", type=int, default=1)
@@ -379,7 +551,11 @@ def parse_args():
     parser.add_argument("--log-every", type=int, default=100)
     parser.add_argument("--save-every", type=int, default=500)
     parser.add_argument("--nrow", type=int, default=0)
-    parser.add_argument("--output-dir", type=str, default="results/reconstructions/local_update_bs1")
+    parser.add_argument(
+        "--output-dir",
+        type=str,
+        default="results/reconstructions/local_update_bs1",
+    )
 
     return parser.parse_args()
 

@@ -219,6 +219,39 @@ def total_variation(x: torch.Tensor) -> torch.Tensor:
     return tv_h + tv_w
 
 
+def matching_loss_value(
+    predicted_deltas,
+    observed_deltas,
+    matching_loss: str,
+) -> torch.Tensor:
+    """Compute matching loss between predicted and observed local updates."""
+    if matching_loss == "mse":
+        loss = torch.zeros((), device=predicted_deltas[0].device)
+        for predicted_delta, observed_delta in zip(predicted_deltas, observed_deltas):
+            loss = loss + F.mse_loss(predicted_delta, observed_delta)
+        return loss
+
+    if matching_loss == "cosine":
+        predicted_flat = torch.cat([delta.reshape(-1) for delta in predicted_deltas])
+        observed_flat = torch.cat([delta.reshape(-1) for delta in observed_deltas])
+        return 1.0 - F.cosine_similarity(
+            predicted_flat,
+            observed_flat,
+            dim=0,
+            eps=1e-12,
+        )
+
+    if matching_loss == "mse_normalized":
+        loss = torch.zeros((), device=predicted_deltas[0].device)
+        for predicted_delta, observed_delta in zip(predicted_deltas, observed_deltas):
+            predicted_norm = predicted_delta / (predicted_delta.norm() + 1e-12)
+            observed_norm = observed_delta / (observed_delta.norm() + 1e-12)
+            loss = loss + F.mse_loss(predicted_norm, observed_norm)
+        return loss
+
+    raise ValueError(f"Unknown matching_loss: {matching_loss}")
+
+
 def build_per_sample_metrics(
     original_pixels: torch.Tensor,
     reconstructed_pixels: torch.Tensor,
@@ -375,9 +408,11 @@ def run_attack(args) -> None:
             weight_decay=args.weight_decay,
         )
 
-        update_loss = torch.zeros((), device=device)
-        for predicted_delta, observed_delta in zip(predicted_deltas, observed_deltas):
-            update_loss = update_loss + F.mse_loss(predicted_delta, observed_delta)
+        update_loss = matching_loss_value(
+            predicted_deltas=predicted_deltas,
+            observed_deltas=observed_deltas,
+            matching_loss=args.matching_loss,
+        )
 
         tv_loss = total_variation(reconstructed_pixels)
         total_loss = update_loss + args.tv_weight * tv_loss
@@ -488,6 +523,7 @@ def run_attack(args) -> None:
         "model": "ResNet-18 adapted for CIFAR-10",
         "model_path": args.model_path,
         "grad_scope": args.grad_scope,
+        "matching_loss": args.matching_loss,
         "iterations": args.iterations,
         "attack_lr": args.attack_lr,
         "tv_weight": args.tv_weight,
@@ -548,6 +584,12 @@ def parse_args():
     parser.add_argument("--device", type=str, default=None)
     parser.add_argument("--model-path", type=str, default=None)
     parser.add_argument("--grad-scope", type=str, default="all", choices=["fc", "all"])
+    parser.add_argument(
+        "--matching-loss",
+        type=str,
+        default="mse",
+        choices=["mse", "cosine", "mse_normalized"],
+    )
     parser.add_argument("--log-every", type=int, default=100)
     parser.add_argument("--save-every", type=int, default=500)
     parser.add_argument("--nrow", type=int, default=0)

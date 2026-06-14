@@ -248,3 +248,93 @@ def test(net, testloader, device):
     accuracy = correct / total
     avg_loss = loss / max(num_batches, 1)
     return avg_loss, accuracy
+
+def apply_update_defense(
+    initial_state,
+    updated_state,
+    trainable_parameter_names,
+    defense_type="none",
+    clip_norm=0.0,
+    noise_std=0.0,
+    seed=None,
+):
+    """Apply clipping/noise to a client model update.
+
+    The defense is applied only to trainable parameters, not to BatchNorm buffers.
+    This keeps running statistics untouched while perturbing the actual model update.
+    """
+    defense_type = str(defense_type).lower()
+
+    if defense_type not in {"none", "clipping", "noise", "clipping_noise"}:
+        raise ValueError(f"Unknown defense_type: {defense_type}")
+
+    defended_state = {
+        key: value.detach().clone()
+        for key, value in updated_state.items()
+    }
+
+    deltas = []
+    keys = []
+
+    for key in trainable_parameter_names:
+        if key not in initial_state or key not in updated_state:
+            continue
+        if not torch.is_floating_point(updated_state[key]):
+            continue
+
+        updated_tensor = updated_state[key].detach()
+        initial_tensor = initial_state[key].detach().to(
+            device=updated_tensor.device,
+            dtype=updated_tensor.dtype,
+        )
+
+        delta = updated_tensor - initial_tensor
+        deltas.append(delta.reshape(-1))
+        keys.append(key)
+
+    if not deltas:
+        return defended_state, {
+            "update_norm": 0.0,
+            "clipping_scale": 1.0,
+            "noise_std": float(noise_std if defense_type in {"noise", "clipping_noise"} else 0.0),
+        }
+
+    flat_delta = torch.cat(deltas)
+    update_norm = torch.norm(flat_delta, p=2).item()
+
+    clipping_scale = 1.0
+    if defense_type in {"clipping", "clipping_noise"} and clip_norm > 0:
+        clipping_scale = min(1.0, float(clip_norm) / (update_norm + 1e-12))
+
+    generator = None
+    if seed is not None:
+        generator = torch.Generator(device=flat_delta.device)
+        generator.manual_seed(int(seed))
+
+    for key in keys:
+        updated_tensor = updated_state[key].detach()
+        initial_tensor = initial_state[key].detach().to(
+            device=updated_tensor.device,
+            dtype=updated_tensor.dtype,
+        )
+
+        delta = updated_tensor - initial_tensor
+        defended_delta = delta * clipping_scale
+
+        if defense_type in {"noise", "clipping_noise"} and noise_std > 0:
+            noise = torch.randn(
+                defended_delta.shape,
+                generator=generator,
+                device=defended_delta.device,
+                dtype=defended_delta.dtype,
+            ) * float(noise_std)
+            defended_delta = defended_delta + noise
+
+        defended_state[key] = initial_tensor + defended_delta
+
+    return defended_state, {
+        "update_norm": float(update_norm),
+        "clipping_scale": float(clipping_scale),
+        "noise_std": float(noise_std if defense_type in {"noise", "clipping_noise"} else 0.0),
+    }
+

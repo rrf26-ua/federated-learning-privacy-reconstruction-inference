@@ -4,7 +4,7 @@ import torch
 from flwr.app import ArrayRecord, Context, Message, MetricRecord, RecordDict
 from flwr.clientapp import ClientApp
 
-from fl_security_benchmark.task import Net, load_data
+from fl_security_benchmark.task import Net, apply_update_defense, load_data
 from fl_security_benchmark.task import test as test_fn
 from fl_security_benchmark.task import train as train_fn
 from fl_security_benchmark.task import train_fedsgd as train_fedsgd_fn
@@ -26,8 +26,17 @@ def train(msg: Message, context: Context):
 
     model = Net()
     model.load_state_dict(msg.content["arrays"].to_torch_state_dict())
+
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model.to(device)
+
+    initial_state = {
+        key: value.detach().clone()
+        for key, value in model.state_dict().items()
+    }
+    trainable_parameter_names = {
+        name for name, _ in model.named_parameters()
+    }
 
     trainloader, _ = load_data(
         partition_id=partition_id,
@@ -56,10 +65,28 @@ def train(msg: Message, context: Context):
     else:
         raise ValueError(f"Unknown fl-algorithm: {algorithm}")
 
-    model_record = ArrayRecord(model.state_dict())
+    defense_type = str(context.run_config.get("defense-type", "none")).lower()
+    defense_clip_norm = float(context.run_config.get("defense-clip-norm", 0.0))
+    defense_noise_std = float(context.run_config.get("defense-noise-std", 0.0))
+    defense_seed = client_seed + 10_000
+
+    defended_state, defense_metrics = apply_update_defense(
+        initial_state=initial_state,
+        updated_state=model.state_dict(),
+        trainable_parameter_names=trainable_parameter_names,
+        defense_type=defense_type,
+        clip_norm=defense_clip_norm,
+        noise_std=defense_noise_std,
+        seed=defense_seed,
+    )
+
+    model_record = ArrayRecord(defended_state)
     metrics = {
         "train_loss": train_loss,
         "num-examples": len(trainloader.dataset),
+        "update_norm": defense_metrics["update_norm"],
+        "clipping_scale": defense_metrics["clipping_scale"],
+        "noise_std": defense_metrics["noise_std"],
     }
     metric_record = MetricRecord(metrics)
     content = RecordDict({"arrays": model_record, "metrics": metric_record})

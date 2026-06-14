@@ -27,6 +27,9 @@ serverapp = "fl_security_benchmark.server_app:app"
 clientapp = "fl_security_benchmark.client_app:app"
 
 [tool.flwr.app.config]
+defense-type = "none"
+defense-clip-norm = 0.0
+defense-noise-std = 0.0
 fl-strategy = "fedavg"
 server-learning-rate = 1.0
 server-momentum = 0.0

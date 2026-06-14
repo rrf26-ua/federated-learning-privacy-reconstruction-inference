@@ -1,0 +1,4 @@
+algorithm,rounds,clients,learning_rate,batch_size,seed,final_accuracy,best_accuracy,final_loss,notes
+fedsgd,20,6,0.02,64,42,0.2065,0.2065,2.1497087038246687,stable_but_slow
+fedsgd,20,6,0.05,64,42,0.2473,0.2473,2.0385442987369125,best_balance
+fedsgd,20,6,0.1,64,42,0.2275,0.2559,2.3771732514071617,higher_peak_but_unstable

@@ -27,6 +27,7 @@ serverapp = "fl_security_benchmark.server_app:app"
 clientapp = "fl_security_benchmark.client_app:app"
 
 [tool.flwr.app.config]
+fl-algorithm = "fedavg"
 num-server-rounds = 20
 fraction-train = 1.0
 fraction-evaluate = 0.0

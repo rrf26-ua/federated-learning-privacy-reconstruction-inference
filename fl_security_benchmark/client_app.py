@@ -60,7 +60,6 @@ def train(msg: Message, context: Context):
     metrics = {
         "train_loss": train_loss,
         "num-examples": len(trainloader.dataset),
-        "algorithm": algorithm,
     }
     metric_record = MetricRecord(metrics)
     content = RecordDict({"arrays": model_record, "metrics": metric_record})

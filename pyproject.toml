@@ -27,6 +27,14 @@ serverapp = "fl_security_benchmark.server_app:app"
 clientapp = "fl_security_benchmark.client_app:app"
 
 [tool.flwr.app.config]
+fl-strategy = "fedavg"
+server-learning-rate = 1.0
+server-momentum = 0.0
+fedopt-eta = 0.1
+fedopt-eta-l = 0.05
+fedopt-beta1 = 0.9
+fedopt-beta2 = 0.99
+fedopt-tau = 0.001
 fl-algorithm = "fedavg"
 num-server-rounds = 20
 fraction-train = 1.0

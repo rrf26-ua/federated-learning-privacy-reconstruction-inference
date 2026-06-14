@@ -7,6 +7,7 @@ from flwr.clientapp import ClientApp
 from fl_security_benchmark.task import Net, load_data
 from fl_security_benchmark.task import test as test_fn
 from fl_security_benchmark.task import train as train_fn
+from fl_security_benchmark.task import train_fedsgd as train_fedsgd_fn
 from fl_security_benchmark.utils.reproducibility import set_seed
 
 app = ClientApp()
@@ -35,18 +36,31 @@ def train(msg: Message, context: Context):
         seed=client_seed,
     )
 
-    train_loss = train_fn(
-        model,
-        trainloader,
-        int(context.run_config["local-epochs"]),
-        float(msg.content["config"]["lr"]),
-        device,
-    )
+    algorithm = str(context.run_config.get("fl-algorithm", "fedavg")).lower()
+
+    if algorithm == "fedavg":
+        train_loss = train_fn(
+            model,
+            trainloader,
+            int(context.run_config["local-epochs"]),
+            float(msg.content["config"]["lr"]),
+            device,
+        )
+    elif algorithm == "fedsgd":
+        train_loss = train_fedsgd_fn(
+            model,
+            trainloader,
+            float(msg.content["config"]["lr"]),
+            device,
+        )
+    else:
+        raise ValueError(f"Unknown fl-algorithm: {algorithm}")
 
     model_record = ArrayRecord(model.state_dict())
     metrics = {
         "train_loss": train_loss,
         "num-examples": len(trainloader.dataset),
+        "algorithm": algorithm,
     }
     metric_record = MetricRecord(metrics)
     content = RecordDict({"arrays": model_record, "metrics": metric_record})

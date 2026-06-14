@@ -172,6 +172,54 @@ def train(net, trainloader, epochs, lr, device):
     return running_loss / max(num_batches, 1)
 
 
+def train_fedsgd(net, trainloader, lr, device, weight_decay=5e-4):
+    """Apply one FedSGD-style update using the average local gradient.
+
+    This computes the gradient over the complete local client partition and
+    applies a single SGD step. When the server aggregates the resulting
+    parameters with FedAvg weighting, this is equivalent to aggregating client
+    gradients and applying one global FedSGD update.
+    """
+    net.to(device)
+    criterion = torch.nn.CrossEntropyLoss(reduction="sum").to(device)
+
+    net.train()
+    net.zero_grad(set_to_none=True)
+
+    total_loss = 0.0
+    total_examples = 0
+
+    for batch in trainloader:
+        images = batch["img"].to(device)
+        labels = batch["label"].to(device)
+
+        outputs = net(images)
+        loss = criterion(outputs, labels)
+        loss.backward()
+
+        total_loss += loss.item()
+        total_examples += labels.size(0)
+
+    if total_examples == 0:
+        return 0.0
+
+    with torch.no_grad():
+        for param in net.parameters():
+            if param.grad is None:
+                continue
+
+            avg_grad = param.grad / total_examples
+
+            if weight_decay > 0:
+                avg_grad = avg_grad + weight_decay * param
+
+            param -= lr * avg_grad
+
+    net.zero_grad(set_to_none=True)
+
+    return total_loss / total_examples
+
+
 def test(net, testloader, device):
     """Evaluate the model on a validation/test set."""
     net.to(device)

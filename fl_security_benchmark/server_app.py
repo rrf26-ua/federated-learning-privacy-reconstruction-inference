@@ -19,8 +19,11 @@ def main(grid: Grid, context: Context) -> None:
     seed = int(context.run_config["seed"])
     fraction_train = float(context.run_config.get("fraction-train", 1.0))
     fraction_evaluate = float(context.run_config.get("fraction-evaluate", 0.0))
+    algorithm = str(context.run_config.get("fl-algorithm", "fedavg")).lower()
 
     set_seed(seed)
+
+    print(f"[INFO] Federated algorithm mode: {algorithm}")
 
     global_model = Net()
     arrays = ArrayRecord(global_model.state_dict())
@@ -43,7 +46,7 @@ def main(grid: Grid, context: Context) -> None:
 
     print("\nSaving final model to disk...")
     state_dict = result.arrays.to_torch_state_dict()
-    torch.save(state_dict, "final_model.pt")
+    torch.save(state_dict, f"final_model_{algorithm}.pt")
 
 
 def global_evaluate(server_round: int, arrays: ArrayRecord) -> MetricRecord:

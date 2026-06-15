@@ -1,0 +1,14 @@
+sample,defense,label,raw_norm,defended_norm,clip_scale,noise_std,inferred_label,best_oracle_psnr,final_psnr
+0,none,airplane,1.218655,1.218655,1.0000,0.0,airplane,35.7765,35.0067
+0,clipnoise,airplane,1.218655,6.794307,1.0000,0.002,airplane,17.0550,16.5891
+1,none,frog,1.303638,1.303638,1.0000,0.0,frog,15.0569,15.0638
+1,clipnoise,frog,1.303638,6.811066,1.0000,0.002,frog,10.4280,10.4289
+2,none,airplane,1.996998,1.996998,1.0000,0.0,airplane,29.9152,27.8809
+2,clipnoise,airplane,1.996998,6.975797,1.0000,0.002,airplane,14.1616,14.1552
+3,none,bird,2.231690,2.231690,1.0000,0.0,bird,29.5776,29.5910
+3,clipnoise,bird,2.231689,7.046407,1.0000,0.002,bird,13.4829,13.4740
+4,none,horse,2.112637,2.112637,1.0000,0.0,horse,31.4294,31.0820
+4,clipnoise,horse,2.112637,7.009930,1.0000,0.002,horse,12.4244,12.4256
+MEAN,none,NA,NA,NA,NA,0.0,5/5,28.3511,27.7257
+MEAN,clipnoise,NA,NA,NA,NA,0.002,5/5,13.5104,13.4146
+DROP,clipnoise_vs_none,NA,NA,NA,NA,0.002,0/5 labels prevented,14.8408,14.3111

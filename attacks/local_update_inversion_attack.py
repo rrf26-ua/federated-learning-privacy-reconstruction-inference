@@ -252,6 +252,61 @@ def matching_loss_value(
     raise ValueError(f"Unknown matching_loss: {matching_loss}")
 
 
+
+def defend_observed_deltas(
+    observed_deltas,
+    defense_type: str,
+    clip_norm: float,
+    noise_std: float,
+    seed: int | None = None,
+):
+    """Apply clipping/noise to the observed update seen by the attacker."""
+    defense_type = str(defense_type).lower()
+
+    if defense_type not in {"none", "clipping", "noise", "clipping_noise"}:
+        raise ValueError(f"Unknown observed defense: {defense_type}")
+
+    flat = torch.cat([delta.detach().reshape(-1) for delta in observed_deltas])
+    raw_norm = torch.norm(flat, p=2).item()
+
+    clipping_scale = 1.0
+    if defense_type in {"clipping", "clipping_noise"} and clip_norm > 0:
+        clipping_scale = min(1.0, float(clip_norm) / (raw_norm + 1e-12))
+
+    generator = None
+    if seed is not None:
+        generator = torch.Generator(device=observed_deltas[0].device)
+        generator.manual_seed(int(seed))
+
+    defended_deltas = []
+
+    for delta in observed_deltas:
+        defended = delta.detach().clone() * clipping_scale
+
+        if defense_type in {"noise", "clipping_noise"} and noise_std > 0:
+            noise = torch.randn(
+                defended.shape,
+                generator=generator,
+                device=defended.device,
+                dtype=defended.dtype,
+            ) * float(noise_std)
+            defended = defended + noise
+
+        defended_deltas.append(defended.detach())
+
+    defended_flat = torch.cat([delta.reshape(-1) for delta in defended_deltas])
+    defended_norm = torch.norm(defended_flat, p=2).item()
+
+    return defended_deltas, {
+        "observed_raw_update_norm": float(raw_norm),
+        "observed_defended_update_norm": float(defended_norm),
+        "observed_clipping_scale": float(clipping_scale),
+        "observed_noise_std": float(
+            noise_std if defense_type in {"noise", "clipping_noise"} else 0.0
+        ),
+    }
+
+
 def build_per_sample_metrics(
     original_pixels: torch.Tensor,
     reconstructed_pixels: torch.Tensor,
@@ -339,13 +394,27 @@ def run_attack(args) -> None:
         create_graph=False,
     )
 
-    observed_deltas = gradients_to_sgd_deltas(
+    raw_observed_deltas = gradients_to_sgd_deltas(
         named_params=named_params,
         grads=[grad.detach() for grad in true_grads],
         local_lr=args.local_lr,
         weight_decay=args.weight_decay,
     )
-    observed_deltas = [delta.detach() for delta in observed_deltas]
+    raw_observed_deltas = [delta.detach() for delta in raw_observed_deltas]
+
+    observed_deltas, observed_defense_metrics = defend_observed_deltas(
+        observed_deltas=raw_observed_deltas,
+        defense_type=args.observed_defense,
+        clip_norm=args.observed_clip_norm,
+        noise_std=args.observed_noise_std,
+        seed=args.observed_noise_seed,
+    )
+
+    print(f"[INFO] Observed defense: {args.observed_defense}")
+    print(f"[INFO] Observed raw update norm: {observed_defense_metrics['observed_raw_update_norm']:.6f}")
+    print(f"[INFO] Observed defended update norm: {observed_defense_metrics['observed_defended_update_norm']:.6f}")
+    print(f"[INFO] Observed clipping scale: {observed_defense_metrics['observed_clipping_scale']:.6f}")
+    print(f"[INFO] Observed noise std: {observed_defense_metrics['observed_noise_std']}")
 
     inferred_label = None
     if args.batch_size == 1:
@@ -524,6 +593,11 @@ def run_attack(args) -> None:
         "model_path": args.model_path,
         "grad_scope": args.grad_scope,
         "matching_loss": args.matching_loss,
+        "observed_defense": args.observed_defense,
+        "observed_clip_norm": args.observed_clip_norm,
+        "observed_noise_std": args.observed_noise_std,
+        "observed_noise_seed": args.observed_noise_seed,
+        **observed_defense_metrics,
         "iterations": args.iterations,
         "attack_lr": args.attack_lr,
         "tv_weight": args.tv_weight,
@@ -590,6 +664,15 @@ def parse_args():
         default="mse",
         choices=["mse", "cosine", "mse_normalized"],
     )
+    parser.add_argument(
+        "--observed-defense",
+        type=str,
+        default="none",
+        choices=["none", "clipping", "noise", "clipping_noise"],
+    )
+    parser.add_argument("--observed-clip-norm", type=float, default=0.0)
+    parser.add_argument("--observed-noise-std", type=float, default=0.0)
+    parser.add_argument("--observed-noise-seed", type=int, default=12345)
     parser.add_argument("--log-every", type=int, default=100)
     parser.add_argument("--save-every", type=int, default=500)
     parser.add_argument("--nrow", type=int, default=0)

@@ -1,0 +1,4 @@
+configuration,defense_type,clip_norm,noise_std,final_accuracy,final_loss,mean_reconstruction_psnr,mean_psnr_drop_vs_none,label_inference,interpretation
+No defense,none,NA,0.0,0.8396,0.5095,28.3511,0.0000,5/5,High utility but high visual reconstruction leakage
+Clipping C=7.5,clipping,7.5,0.0,0.8359,0.5305,NA,NA,not evaluated on samples 0-4,Preserves utility but pure clipping is weak against cosine matching
+Clipping C=7.5 + Gaussian noise,clipping_noise,7.5,0.002,0.8300,0.5823,13.5104,14.8408,5/5,Preserves high utility and strongly reduces visual reconstruction leakage

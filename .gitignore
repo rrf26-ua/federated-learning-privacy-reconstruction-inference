@@ -16,3 +16,6 @@ final_model.pt
 final_model.pt
 *.pt
 results/reconstructions/
+
+# Local dataset cache
+data/

@@ -4,7 +4,12 @@ import torch
 from flwr.app import ArrayRecord, Context, Message, MetricRecord, RecordDict
 from flwr.clientapp import ClientApp
 
-from fl_security_benchmark.task import Net, apply_update_defense, load_data
+from fl_security_benchmark.task import (
+    Net,
+    apply_update_defense,
+    fedsgd_learning_rate,
+    load_data,
+)
 from fl_security_benchmark.task import test as test_fn
 from fl_security_benchmark.task import train as train_fn
 from fl_security_benchmark.task import train_fedsgd as train_fedsgd_fn
@@ -22,7 +27,17 @@ def train(msg: Message, context: Context):
     base_seed = int(context.run_config["seed"])
     client_seed = base_seed + partition_id
 
-    set_seed(client_seed)
+    server_round = int(msg.content["config"].get("server-round", 0))
+    seed_with_server_round = bool(
+        context.run_config.get("seed-with-server-round", False)
+    )
+    training_seed = client_seed
+    if seed_with_server_round:
+        training_seed += server_round * num_partitions
+
+    # The partition split remains tied to client_seed below. Optionally changing
+    # this process-wide seed only varies stochastic training operations by round.
+    set_seed(training_seed)
 
     model = Net()
     model.load_state_dict(msg.content["arrays"].to_torch_state_dict())
@@ -56,11 +71,19 @@ def train(msg: Message, context: Context):
             device,
         )
     elif algorithm == "fedsgd":
+        learning_rate = fedsgd_learning_rate(
+            base_lr=float(msg.content["config"]["lr"]),
+            server_round=server_round,
+            num_rounds=int(context.run_config["num-server-rounds"]),
+            scheduler=str(context.run_config.get("scheduler", "none")),
+            min_lr=float(context.run_config.get("scheduler-min-lr", 0.0)),
+        )
         train_loss = train_fedsgd_fn(
             model,
             trainloader,
-            float(msg.content["config"]["lr"]),
+            learning_rate,
             device,
+            weight_decay=float(context.run_config.get("weight-decay", 5e-4)),
         )
     else:
         raise ValueError(f"Unknown fl-algorithm: {algorithm}")
@@ -83,6 +106,11 @@ def train(msg: Message, context: Context):
     model_record = ArrayRecord(defended_state)
     metrics = {
         "train_loss": train_loss,
+        "learning_rate": (
+            learning_rate
+            if algorithm == "fedsgd"
+            else float(msg.content["config"]["lr"])
+        ),
         "num-examples": len(trainloader.dataset),
         "update_norm": defense_metrics["update_norm"],
         "clipping_scale": defense_metrics["clipping_scale"],

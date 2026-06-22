@@ -75,9 +75,10 @@ def main(grid: Grid, context: Context) -> None:
         evaluate_fn=global_evaluate,
     )
 
-    print("\nSaving final model to disk...")
-    state_dict = result.arrays.to_torch_state_dict()
-    torch.save(state_dict, f"final_model_{algorithm}_{strategy_name}.pt")
+    if bool(context.run_config.get("save-final-model", True)):
+        print("\nSaving final model to disk...")
+        state_dict = result.arrays.to_torch_state_dict()
+        torch.save(state_dict, f"final_model_{algorithm}_{strategy_name}.pt")
 
 
 def global_evaluate(server_round: int, arrays: ArrayRecord) -> MetricRecord:

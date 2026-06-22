@@ -1,5 +1,7 @@
 """Federated CIFAR-10 task using a ResNet-18 model adapted for Flower."""
 
+import math
+
 import torch
 import torch.nn as nn
 from datasets import load_dataset
@@ -18,6 +20,32 @@ from torchvision.transforms import (
 
 DATALOADER_NUM_WORKERS = 0
 PIN_MEMORY = False
+
+
+def fedsgd_learning_rate(
+    base_lr: float,
+    server_round: int,
+    num_rounds: int,
+    scheduler: str = "none",
+    min_lr: float = 0.0,
+) -> float:
+    """Return the FedSGD learning rate for one server round."""
+    scheduler = str(scheduler).lower()
+
+    if scheduler == "none":
+        return float(base_lr)
+    if scheduler != "cosine":
+        raise ValueError(f"Unknown FedSGD scheduler: {scheduler}")
+    if num_rounds < 1:
+        raise ValueError("num_rounds must be at least 1")
+    if not 0.0 <= min_lr <= base_lr:
+        raise ValueError("min_lr must satisfy 0 <= min_lr <= base_lr")
+
+    # Round 1 uses base_lr and the final round uses min_lr.
+    progress = (max(server_round, 1) - 1) / max(num_rounds - 1, 1)
+    progress = min(progress, 1.0)
+    cosine = 0.5 * (1.0 + math.cos(math.pi * progress))
+    return float(min_lr + (base_lr - min_lr) * cosine)
 
 
 class Net(nn.Module):
@@ -337,4 +365,3 @@ def apply_update_defense(
         "clipping_scale": float(clipping_scale),
         "noise_std": float(noise_std if defense_type in {"noise", "clipping_noise"} else 0.0),
     }
-

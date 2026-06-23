@@ -1,0 +1,83 @@
+{
+  "attack": "local_update_inversion",
+  "dataset": "CIFAR-10",
+  "split": "train",
+  "sample_start": 1,
+  "sample_indices": [
+    1
+  ],
+  "batch_size": 1,
+  "model": "ResNet-18 adapted for CIFAR-10",
+  "model_path": null,
+  "grad_scope": "all",
+  "matching_loss": "cosine",
+  "observed_defense": "clipping_noise",
+  "observed_clip_norm": 7.5,
+  "observed_noise_std": 0.002,
+  "observed_noise_seed": 42,
+  "observed_raw_update_norm": 2.1727294921875,
+  "observed_defended_update_norm": 7.027405261993408,
+  "observed_clipping_scale": 1.0,
+  "iterations": 2000,
+  "attack_lr": 0.03,
+  "tv_weight": 1e-06,
+  "local_lr": 0.05,
+  "weight_decay": 0.0005,
+  "labels": [
+    6
+  ],
+  "label_names": [
+    "frog"
+  ],
+  "uses_true_labels": true,
+  "inferred_label_from_update": 6,
+  "inferred_label_from_update_name": "frog",
+  "true_loss": 1.2118713855743408,
+  "best_update_loss": 0.7006049156188965,
+  "best_update_iteration": 1998,
+  "best_update_mse": 0.0842236801981926,
+  "best_update_psnr": 10.745657857743646,
+  "best_oracle_iteration": 2000,
+  "best_oracle_mse": 0.08417835086584091,
+  "best_oracle_psnr": 10.747995867476636,
+  "final_mse": 0.08414467424154282,
+  "final_psnr": 10.74973366565221,
+  "per_sample": [
+    {
+      "sample_index": 1,
+      "true_label": 6,
+      "true_label_name": "frog",
+      "mse": 0.0842236801981926,
+      "psnr": 10.745657857743646
+    }
+  ],
+  "per_sample_best_update": [
+    {
+      "sample_index": 1,
+      "true_label": 6,
+      "true_label_name": "frog",
+      "mse": 0.0842236801981926,
+      "psnr": 10.745657857743646
+    }
+  ],
+  "per_sample_best_oracle": [
+    {
+      "sample_index": 1,
+      "true_label": 6,
+      "true_label_name": "frog",
+      "mse": 0.08417835086584091,
+      "psnr": 10.747995867476636
+    }
+  ],
+  "per_sample_final": [
+    {
+      "sample_index": 1,
+      "true_label": 6,
+      "true_label_name": "frog",
+      "mse": 0.08414467424154282,
+      "psnr": 10.74973366565221
+    }
+  ],
+  "elapsed_seconds": 63.11105823516846,
+  "device": "cuda:0"
+}

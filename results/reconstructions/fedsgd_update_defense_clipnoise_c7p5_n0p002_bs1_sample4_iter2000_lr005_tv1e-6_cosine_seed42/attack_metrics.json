@@ -1,0 +1,83 @@
+{
+  "attack": "local_update_inversion",
+  "dataset": "CIFAR-10",
+  "split": "train",
+  "sample_start": 4,
+  "sample_indices": [
+    4
+  ],
+  "batch_size": 1,
+  "model": "ResNet-18 adapted for CIFAR-10",
+  "model_path": null,
+  "grad_scope": "all",
+  "matching_loss": "cosine",
+  "observed_defense": "clipping_noise",
+  "observed_clip_norm": 7.5,
+  "observed_noise_std": 0.002,
+  "observed_noise_seed": 42,
+  "observed_raw_update_norm": 3.521061658859253,
+  "observed_defended_update_norm": 7.554816246032715,
+  "observed_clipping_scale": 1.0,
+  "iterations": 2000,
+  "attack_lr": 0.03,
+  "tv_weight": 1e-06,
+  "local_lr": 0.05,
+  "weight_decay": 0.0005,
+  "labels": [
+    7
+  ],
+  "label_names": [
+    "horse"
+  ],
+  "uses_true_labels": true,
+  "inferred_label_from_update": 7,
+  "inferred_label_from_update_name": "horse",
+  "true_loss": 3.5956223011016846,
+  "best_update_loss": 0.5422888994216919,
+  "best_update_iteration": 1957,
+  "best_update_mse": 0.02562672086060047,
+  "best_update_psnr": 15.913069616368977,
+  "best_oracle_iteration": 2000,
+  "best_oracle_mse": 0.02481594868004322,
+  "best_oracle_psnr": 16.05269117660591,
+  "final_mse": 0.02480662800371647,
+  "final_psnr": 16.054322659134407,
+  "per_sample": [
+    {
+      "sample_index": 4,
+      "true_label": 7,
+      "true_label_name": "horse",
+      "mse": 0.02562672086060047,
+      "psnr": 15.913069616368977
+    }
+  ],
+  "per_sample_best_update": [
+    {
+      "sample_index": 4,
+      "true_label": 7,
+      "true_label_name": "horse",
+      "mse": 0.02562672086060047,
+      "psnr": 15.913069616368977
+    }
+  ],
+  "per_sample_best_oracle": [
+    {
+      "sample_index": 4,
+      "true_label": 7,
+      "true_label_name": "horse",
+      "mse": 0.02481594868004322,
+      "psnr": 16.05269117660591
+    }
+  ],
+  "per_sample_final": [
+    {
+      "sample_index": 4,
+      "true_label": 7,
+      "true_label_name": "horse",
+      "mse": 0.02480662800371647,
+      "psnr": 16.054322659134407
+    }
+  ],
+  "elapsed_seconds": 63.828500509262085,
+  "device": "cuda:0"
+}

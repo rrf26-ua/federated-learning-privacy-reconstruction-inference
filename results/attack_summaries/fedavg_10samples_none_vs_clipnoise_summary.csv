@@ -1,0 +1,3 @@
+configuration,samples,mean_final_psnr,std_final_psnr,min_final_psnr,max_final_psnr,label_accuracy
+FedAvg no defense,10,25.9287,5.4983,15.4529,34.5245,10/10
+FedAvg clipping C=7.5 + noise sigma=0.002,10,12.5559,1.593,9.2895,15.0215,10/10

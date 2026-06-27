@@ -1,0 +1,4 @@
+config,runs,mean_final_psnr,std_final_psnr,min_final_psnr,max_final_psnr,mean_best_update_psnr,std_best_update_psnr,mean_best_oracle_psnr,label_accuracy,mean_elapsed_seconds
+none,25,25.795,6.3105,14.0556,34.767,25.7295,6.4166,26.1903,25/25,62.94
+noise_s0002,25,12.4824,1.2732,10.5636,15.053,12.4188,1.3047,12.5864,25/25,64.03
+clip_c05_noise_s0002,25,10.7216,1.6353,8.958,14.2193,10.7183,1.6539,10.9326,25/25,66.5

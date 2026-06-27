@@ -151,6 +151,43 @@ def total_variation(x: torch.Tensor) -> torch.Tensor:
     return tv_h + tv_w
 
 
+def compute_update_matching_loss(
+    predicted_deltas: OrderedDict[str, torch.Tensor],
+    observed_deltas: OrderedDict[str, torch.Tensor],
+    selected_names: list[str],
+    matching_loss: str,
+    device: torch.device,
+) -> torch.Tensor:
+    """Compute update matching loss between predicted and observed local updates."""
+    if matching_loss == "mse":
+        loss = torch.zeros((), device=device)
+        for name in selected_names:
+            loss = loss + F.mse_loss(predicted_deltas[name], observed_deltas[name])
+        return loss
+
+    if matching_loss == "mse_normalized":
+        loss = torch.zeros((), device=device)
+        eps = 1e-12
+        for name in selected_names:
+            pred = predicted_deltas[name]
+            obs = observed_deltas[name]
+            pred_norm = pred / (torch.norm(pred) + eps)
+            obs_norm = obs / (torch.norm(obs) + eps)
+            loss = loss + F.mse_loss(pred_norm, obs_norm)
+        return loss
+
+    if matching_loss == "cosine":
+        pred_flat = torch.cat(
+            [predicted_deltas[name].reshape(-1) for name in selected_names]
+        )
+        obs_flat = torch.cat(
+            [observed_deltas[name].reshape(-1) for name in selected_names]
+        )
+        return 1.0 - F.cosine_similarity(pred_flat, obs_flat, dim=0)
+
+    raise ValueError(f"Unknown matching_loss: {matching_loss}")
+
+
 def simulate_multistep_sgd_update(
     model: torch.nn.Module,
     base_params: OrderedDict[str, torch.Tensor],
@@ -322,6 +359,7 @@ def run_attack(args) -> None:
     selected_names = select_parameter_names(base_params, args.grad_scope)
 
     print(f"[INFO] Gradient/update scope: {args.grad_scope}")
+    print(f"[INFO] Matching loss: {args.matching_loss}")
     print(f"[INFO] Number of parameter tensors matched: {len(selected_names)}")
 
     true_loss, observed_deltas = simulate_multistep_sgd_update(
@@ -402,13 +440,13 @@ def run_attack(args) -> None:
             create_graph=True,
         )
 
-        update_loss = torch.zeros((), device=device)
-
-        for name in selected_names:
-            update_loss = update_loss + F.mse_loss(
-                predicted_deltas[name],
-                observed_deltas[name],
-            )
+        update_loss = compute_update_matching_loss(
+            predicted_deltas=predicted_deltas,
+            observed_deltas=observed_deltas,
+            selected_names=selected_names,
+            matching_loss=args.matching_loss,
+            device=device,
+        )
 
         tv_loss = total_variation(reconstructed_pixels)
         total_loss = update_loss + args.tv_weight * tv_loss
@@ -522,6 +560,7 @@ def run_attack(args) -> None:
         "model": "ResNet-18 adapted for CIFAR-10",
         "model_path": args.model_path,
         "grad_scope": args.grad_scope,
+        "matching_loss": args.matching_loss,
         "iterations": args.iterations,
         "attack_lr": args.attack_lr,
         "tv_weight": args.tv_weight,
@@ -584,6 +623,12 @@ def parse_args():
     parser.add_argument("--device", type=str, default=None)
     parser.add_argument("--model-path", type=str, default=None)
     parser.add_argument("--grad-scope", type=str, default="all", choices=["fc", "all"])
+    parser.add_argument(
+        "--matching-loss",
+        type=str,
+        default="mse",
+        choices=["mse", "cosine", "mse_normalized"],
+    )
     parser.add_argument("--log-every", type=int, default=100)
     parser.add_argument("--save-every", type=int, default=500)
     parser.add_argument("--nrow", type=int, default=0)

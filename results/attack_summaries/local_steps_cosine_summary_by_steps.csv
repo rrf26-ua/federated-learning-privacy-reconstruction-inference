@@ -1,0 +1,5 @@
+local_steps,runs,mean_final_psnr,std_final_psnr,min_final_psnr,max_final_psnr,mean_best_update_psnr,mean_best_oracle_psnr,mean_elapsed_seconds
+1,5,26.411,6.2753,17.5577,34.3023,26.8182,27.2484,78.95
+2,5,28.085,6.2477,17.9258,35.0144,27.9013,28.4968,143.4
+5,5,27.0375,6.0705,18.4578,34.8786,27.398,27.7047,353.28
+10,5,26.151,5.5457,19.1061,33.4213,26.6711,26.8528,662.81

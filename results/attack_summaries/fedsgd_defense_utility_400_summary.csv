@@ -1,0 +1,4 @@
+config,defense,clip_norm,noise_std,eval_rounds_parsed,train_rounds_parsed,final_round,final_accuracy,best_accuracy,final_loss,best_loss,mean_update_norm,final_update_norm,mean_clipping_scale,final_clipping_scale,log_path,accuracy_drop_vs_none
+fedsgd_defutil_r400_none,none,0.0,0.0,401,400,400,0.5473,0.5476,1.2235,1.2233,0.039594,0.003858,1.0,1.0,results/raw/fedsgd_defutil_r400_none.log,0.0
+fedsgd_defutil_r400_clip_c005_noise_s000005,clipping_noise,0.05,5e-05,401,400,400,0.535,0.5358,1.261,1.2604,0.031183,0.003753,0.964823,1.0,results/raw/fedsgd_defutil_r400_clip_c005_noise_s000005.log,0.0123
+fedsgd_defutil_r400_noise_s0002_extreme,noise_extreme,0.0,0.002,401,400,400,0.2168,0.3214,2.7084,1.818,0.03464,0.00736,1.0,1.0,results/raw/fedsgd_defutil_r400_noise_s0002_extreme.log,0.3305

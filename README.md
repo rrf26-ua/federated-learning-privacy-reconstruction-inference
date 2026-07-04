@@ -1,74 +1,40 @@
-# Privacy and Security Evaluation of Federated Learning
+# Federated Learning Privacy Reconstruction and Inference
 
-This repository contains the code, experiments, and research notes for a Bachelor's Thesis focused on privacy and security in federated learning using Flower and PyTorch.
+This repository contains the implementation, experiments, scripts, and result summaries developed for the Bachelor's Thesis:
 
-## Research goal
+**Evaluación de privacidad y seguridad en aprendizaje federado para clasificación de imágenes**
 
-The main objective is to study how much private information can leak from federated learning updates and how different defenses affect both privacy and utility.
+The project studies privacy leakage in federated learning for image classification, focusing on reconstruction attacks and label inference from gradients and local model updates.
 
-The project starts from a stable Flower baseline and will progressively incorporate:
-- reconstruction and inference attacks,
-- alternative federated optimization strategies,
-- privacy and security defenses,
-- evaluation of privacy-utility trade-offs.
+## Overview
 
-## Current status
+Federated learning reduces the need to centralize training data, but the gradients and model updates exchanged during training may still leak information about client data. This repository evaluates that risk experimentally using CIFAR-10, PyTorch, Flower, and a ResNet-18 adapted to CIFAR-10.
 
-The repository currently includes a stable baseline based on:
-- Flower
-- PyTorch
-- CIFAR-10
-- FedAvg
+The main experimental baseline is based on FedAvg. FedSGD is included as a methodological contrast to study a different federated update dynamic, not as a direct accuracy competition against FedAvg.
 
-A stable local simulation configuration was obtained after reducing the number of simulated clients and constraining the available resources of the simulation backend.
+## Main components
 
-## Stable baseline configuration
+The repository includes:
 
-Baseline execution used the following simulation parameters:
+- Federated training with Flower and PyTorch.
+- CIFAR-10 image classification with an adapted ResNet-18.
+- FedAvg baseline experiments.
+- FedSGD contrast experiments.
+- Gradient inversion and local update inversion attacks.
+- Label inference experiments.
+- MSE vs cosine matching comparisons.
+- Batch size and local-step sensitivity experiments.
+- Empirical defenses based on clipping and Gaussian noise.
+- Defense ablation studies.
+- Seed robustness experiments.
+- CSV summaries, figures, and research notes used to support the thesis.
 
-- `num-supernodes=4`
-- `client-resources-num-cpus=2`
-- `init-args-num-cpus=2`
+## Repository structure
 
-Example command:
-
-```bash
-flwr run . --stream \
-  --run-config "num-server-rounds=3" \
-  --federation-config "num-supernodes=4 client-resources-num-cpus=2 init-args-num-cpus=2"
-First baseline result
-
-Experiment ID: baseline_flower_pytorch_cifar10_v1
-
-Main observations:
-
-the default quickstart configuration caused out-of-memory failures on the available machine,
-the constrained configuration completed successfully,
-the pipeline now runs end-to-end without client failures,
-results are preliminary and correspond to a single run.
-Repository structure
-
-This repository is being transformed from the official Flower quickstart into a research-oriented benchmark.
-
-Current research-oriented directories include:
-
-research/notes/ for experiment tracking,
-attacks/ for reconstruction and inference attacks,
-defenses/ for privacy and security mechanisms,
-experiments/ for experiment orchestration,
-configs/ for reproducible settings,
-results/ for generated outputs and processed results.
-Planned work
-Keep a stable FedAvg baseline.
-Add experiment tracking and reproducibility support.
-Integrate privacy attacks such as gradient-based reconstruction.
-Compare multiple federated learning strategies.
-Add defenses such as clipping, differential privacy, and secure aggregation.
-Measure the privacy-utility trade-off.
-Reproducibility note
-
-Baseline behavior should remain reproducible while the repository evolves.
-
-License
-
-This repository currently includes the license distributed with the initial Flower app template. It may be revised later depending on thesis and supervisor requirements.
+```text
+attacks/                  Reconstruction and inference attack scripts
+fl_security_benchmark/    Federated learning application code
+scripts/                  Experiment execution scripts
+results/                  Generated outputs, figures, metrics, and summaries
+research/notes/           Experiment notes and methodological tracking
+configs/                  Configuration files, when applicable

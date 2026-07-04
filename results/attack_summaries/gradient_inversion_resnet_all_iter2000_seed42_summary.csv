@@ -1,0 +1,6 @@
+sample_index,split,model,grad_scope,iterations,attack_lr,tv_weight,true_label,true_label_name,inferred_label,inferred_label_name,attack_label,attack_label_name,final_mse,final_psnr,best_grad_loss,elapsed_seconds,device
+0,train,ResNet-18 adapted for CIFAR-10,all,2000,0.03,0.001,0,airplane,0,airplane,0,airplane,0.019589120522141457,17.07985061756918,0.008038650266826153,62.49226927757263,cuda:0
+1,train,ResNet-18 adapted for CIFAR-10,all,2000,0.03,0.001,6,frog,6,frog,6,frog,0.09224355965852737,10.350639460621565,0.005592348985373974,62.60083246231079,cuda:0
+2,train,ResNet-18 adapted for CIFAR-10,all,2000,0.03,0.001,0,airplane,0,airplane,0,airplane,0.045416999608278275,13.427815600460345,0.011622927151620388,62.9195876121521,cuda:0
+3,train,ResNet-18 adapted for CIFAR-10,all,2000,0.03,0.001,2,bird,2,bird,2,bird,0.07676896452903748,11.148143171808034,0.013217178173363209,64.05553030967712,cuda:0
+4,train,ResNet-18 adapted for CIFAR-10,all,2000,0.03,0.001,7,horse,7,horse,7,horse,0.07888741046190262,11.029922997460055,0.01213207095861435,63.47833704948425,cuda:0

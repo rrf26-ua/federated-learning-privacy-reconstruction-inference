@@ -1,0 +1,4 @@
+sample,defense,clip_norm,noise_std,raw_norm,defended_norm,clip_scale,inferred_label,best_update_psnr,best_oracle_psnr,final_psnr
+0,none,0.0,0.0,1.218655,1.218655,1.0000,airplane,35.7637,35.7765,35.0067
+0,clipping,7.5,0.0,1.218655,1.218655,1.0000,airplane,35.9471,36.1270,35.0064
+0,clipping_noise,7.5,0.002,1.218655,6.794307,1.0000,airplane,16.7105,16.7802,16.6353

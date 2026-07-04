@@ -1,0 +1,2 @@
+algorithm,server_strategy,rounds,clients,learning_rate,batch_size,seed,final_accuracy,best_accuracy,final_loss,best_round,elapsed_seconds
+fedsgd,fedavg,50,6,0.05,64,42,0.3088,0.3128,1.8200036135448772,49,896.51

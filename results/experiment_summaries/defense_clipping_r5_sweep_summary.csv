@@ -1,0 +1,5 @@
+defense_type,clip_norm,rounds,local_epochs,learning_rate,batch_size,final_accuracy,final_loss,mean_r1_update_norm,mean_r1_clipping_scale,decision
+clipping,15.0,5,2,0.03,32,0.6598,0.9582,14.2615,1.0000,too_weak
+clipping,12.0,5,2,0.03,32,0.6640,0.9633,14.2615,0.8415,soft_candidate
+clipping,10.0,5,2,0.03,32,0.6543,0.9907,14.2615,0.7012,medium_candidate
+clipping,7.5,5,2,0.03,32,0.6175,1.0628,14.2615,0.5259,strong_candidate

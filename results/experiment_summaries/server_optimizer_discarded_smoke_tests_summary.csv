@@ -1,0 +1,10 @@
+family,client_algorithm,server_strategy,config,rounds,final_accuracy,final_loss,had_nan,decision
+fedavgm,fedsgd,fedavgm,lr005_slr1_sm09,2,0.1000,nan,yes,discarded_unstable
+fedavgm,fedsgd,fedavgm,lr001_slr1_sm09,5,0.1205,2.2946,yes,discarded_nan_and_low_accuracy
+fedavgm,fedsgd,fedavgm,lr002_slr05_sm09,5,0.1000,nan,yes,discarded_unstable
+fedavgm,fedsgd,fedavgm,lr005_slr01_sm09,5,0.1143,2.2991,no,discarded_low_accuracy
+fedavgm,fedsgd,fedavgm,lr005_slr02_sm05,5,0.1326,2.2780,no,discarded_low_accuracy
+fedadam,fedsgd,fedadam,eta0001,5,0.0889,2.4992,no,discarded_near_random
+fedadam,fedsgd,fedadam,eta0005,5,0.0996,2.6668,no,discarded_near_random
+fedadam,fedsgd,fedadam,eta001,5,0.1000,3.4884,no,discarded_loss_increase
+fedadam,fedsgd,fedadam,eta002,5,0.0998,3.3452,no,discarded_loss_increase

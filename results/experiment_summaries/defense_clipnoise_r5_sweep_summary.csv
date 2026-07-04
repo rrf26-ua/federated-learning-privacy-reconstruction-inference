@@ -1,0 +1,4 @@
+defense_type,clip_norm,noise_std,rounds,local_epochs,learning_rate,batch_size,final_accuracy,final_loss,decision
+clipping_noise,7.5,0.0005,5,2,0.03,32,0.6161,1.0733,soft_noise
+clipping_noise,7.5,0.001,5,2,0.03,32,0.6287,1.0407,moderate_noise_candidate
+clipping_noise,7.5,0.002,5,2,0.03,32,0.6271,1.0309,stronger_noise_candidate

@@ -1,0 +1,83 @@
+{
+  "attack": "local_update_inversion",
+  "dataset": "CIFAR-10",
+  "split": "train",
+  "sample_start": 0,
+  "sample_indices": [
+    0
+  ],
+  "batch_size": 1,
+  "model": "ResNet-18 adapted for CIFAR-10",
+  "model_path": null,
+  "grad_scope": "all",
+  "matching_loss": "cosine",
+  "observed_defense": "clipping",
+  "observed_clip_norm": 0.3,
+  "observed_noise_std": 0.0,
+  "observed_noise_seed": 12345,
+  "observed_raw_update_norm": 2.0310916900634766,
+  "observed_defended_update_norm": 0.30000004172325134,
+  "observed_clipping_scale": 0.14770381931427062,
+  "iterations": 2000,
+  "attack_lr": 0.03,
+  "tv_weight": 1e-06,
+  "local_lr": 0.05,
+  "weight_decay": 0.0005,
+  "labels": [
+    0
+  ],
+  "label_names": [
+    "airplane"
+  ],
+  "uses_true_labels": true,
+  "inferred_label_from_update": 0,
+  "inferred_label_from_update_name": "airplane",
+  "true_loss": 2.9373159408569336,
+  "best_update_loss": 0.00412440299987793,
+  "best_update_iteration": 1310,
+  "best_update_mse": 0.000261266395682469,
+  "best_update_psnr": 35.82916446025408,
+  "best_oracle_iteration": 1124,
+  "best_oracle_mse": 0.00022246026492211968,
+  "best_oracle_psnr": 36.52747549924118,
+  "final_mse": 0.00033571539097465575,
+  "final_psnr": 34.74028747932381,
+  "per_sample": [
+    {
+      "sample_index": 0,
+      "true_label": 0,
+      "true_label_name": "airplane",
+      "mse": 0.000261266395682469,
+      "psnr": 35.82916446025408
+    }
+  ],
+  "per_sample_best_update": [
+    {
+      "sample_index": 0,
+      "true_label": 0,
+      "true_label_name": "airplane",
+      "mse": 0.000261266395682469,
+      "psnr": 35.82916446025408
+    }
+  ],
+  "per_sample_best_oracle": [
+    {
+      "sample_index": 0,
+      "true_label": 0,
+      "true_label_name": "airplane",
+      "mse": 0.00022246026492211968,
+      "psnr": 36.52747549924118
+    }
+  ],
+  "per_sample_final": [
+    {
+      "sample_index": 0,
+      "true_label": 0,
+      "true_label_name": "airplane",
+      "mse": 0.00033571539097465575,
+      "psnr": 34.74028747932381
+    }
+  ],
+  "elapsed_seconds": 63.57264542579651,
+  "device": "cuda:0"
+}

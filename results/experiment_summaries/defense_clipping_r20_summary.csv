@@ -1,0 +1,5 @@
+defense_type,clip_norm,rounds,local_epochs,learning_rate,batch_size,final_accuracy,final_loss,final_update_norm,final_clipping_scale,decision
+none,none,20,2,0.03,32,0.8396,0.5095,NA,1.0000,baseline
+clipping,12.0,20,2,0.03,32,0.8374,0.5182,15.1902,0.7900,soft_clipping
+clipping,10.0,20,2,0.03,32,0.8401,0.5162,14.5813,0.6859,medium_clipping
+clipping,7.5,20,2,0.03,32,0.8359,0.5305,13.1487,0.5705,strong_clipping

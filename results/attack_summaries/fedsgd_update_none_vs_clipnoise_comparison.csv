@@ -1,0 +1,7 @@
+sample,label,psnr_no_defense,psnr_clipnoise,psnr_drop,label_inference_no_defense,label_inference_clipnoise,raw_update_norm,clipping_scale,noise_std
+0,airplane,34.97,19.3,15.67,True,True,2.0311,1.0,0.002
+1,frog,16.77,10.75,6.02,True,True,2.1727,1.0,0.002
+2,airplane,27.65,18.0,9.65,True,True,3.3283,1.0,0.002
+3,bird,26.23,15.62,10.61,True,True,3.7195,1.0,0.002
+4,horse,31.44,16.05,15.38,True,True,3.5211,1.0,0.002
+mean,-,27.41,15.94,11.47,5/5,5/5,-,-,0.002

@@ -1,0 +1,114 @@
+🎊 Successfully started run 3619549583151671289
+[92mINFO [0m:      Starting Flower Simulation
+[INFO] Federated algorithm mode: fedavg
+[INFO] Server strategy mode: fedavg
+[93mWARNING [0m:   fraction_evaluate is set to 0.0. Federated evaluation will be skipped.
+[92mINFO [0m:      Starting FedAvg strategy:
+[92mINFO [0m:      	├── Number of rounds: 5
+[92mINFO [0m:      	├── ArrayRecord (42.68 MB)
+[92mINFO [0m:      	├── ConfigRecord (train): {'lr': 0.03}
+[92mINFO [0m:      	├── ConfigRecord (evaluate): (empty!)
+[92mINFO [0m:      	├──> Sampling:
+[92mINFO [0m:      	│	├──Fraction: train (1.00) | evaluate ( 0.00)
+[92mINFO [0m:      	│	├──Minimum nodes: train (1) | evaluate (0)
+[92mINFO [0m:      	│	└──Minimum available nodes: 1
+[92mINFO [0m:      	└──> Keys in records:
+[92mINFO [0m:      		├── Weighted by: 'num-examples'
+[92mINFO [0m:      		├── ArrayRecord key: 'arrays'
+[92mINFO [0m:      		└── ConfigRecord key: 'config'
+[92mINFO [0m:      
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/home/rruiz/Privacy-and-Security-Evaluation-of-Federated-Learning/.venv/lib/python3.12/site-packages/ray/_private/worker.py:2051: FutureWarning: Tip: In future versions of Ray, Ray will no longer override accelerator visible devices env var if num_gpus=0 or num_gpus=None (default). To enable this behavior and turn off this error message, set RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO=0
+  warnings.warn(
+Server-side evaluation round 0: loss=2.9329, accuracy=0.1000
+[92mINFO [0m:      Initial global evaluation results: {'accuracy': 0.1, 'loss': 2.9328789893229295}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 1/5]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[36m(ClientAppActor pid=31375)[0m Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[36m(pid=gcs_server)[0m [2026-06-14 20:16:26,139 E 30700 30700] (gcs_server) gcs_server.cc:302: Failed to establish connection to the event+metrics exporter agent. Events and metrics will not be exported. Exporter agent status: RpcError: Running out of retries to initialize the metrics agent. rpc_code: 14
+[36m(ClientAppActor pid=31376)[0m Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.[32m [repeated 3x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)[0m
+[33m(raylet)[0m [2026-06-14 20:16:27,124 E 30929 30929] (raylet) main.cc:975: Failed to establish connection to the metrics exporter agent. Metrics will not be exported. Exporter agent status: RpcError: Running out of retries to initialize the metrics agent. rpc_code: 14
+[36m(pid=31017)[0m [2026-06-14 20:16:27,625 E 31017 31171] core_worker_process.cc:825: Failed to establish connection to the metrics exporter agent. Metrics will not be exported. Exporter agent status: RpcError: Running out of retries to initialize the metrics agent. rpc_code: 14
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.0147179477987187, 'update_norm': 14.261464871777982, 'clipping_scale': 0.5259125770982186, 'noise_std': 0.0}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 1: loss=2.3387, accuracy=0.1000
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.1, 'loss': 2.3386564953311995}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 2/5]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.8038546468815888, 'update_norm': 11.751484657324603, 'clipping_scale': 0.6382726039517757, 'noise_std': 0.0}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 2: loss=2.2195, accuracy=0.1611
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.1611, 'loss': 2.2194598647439556}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 3/5]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.6038205088317152, 'update_norm': 10.78579006910837, 'clipping_scale': 0.6953662142345856, 'noise_std': 0.0}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 3: loss=1.9434, accuracy=0.3008
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.3008, 'loss': 1.9433651441221784}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 4/5]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.4019240536631616, 'update_norm': 10.389082238902938, 'clipping_scale': 0.7219395813199526, 'noise_std': 0.0}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 4: loss=1.2763, accuracy=0.5330
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.533, 'loss': 1.2762897561310202}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 5/5]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.2392494116790849, 'update_norm': 10.020357266861986, 'clipping_scale': 0.7484965855141088, 'noise_std': 0.0}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 5: loss=1.0628, accuracy=0.6175
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.6175, 'loss': 1.0627625049299496}
+[92mINFO [0m:      
+[92mINFO [0m:      Strategy execution finished in 197.34s
+[92mINFO [0m:      
+[92mINFO [0m:      Final results:
+[92mINFO [0m:      
+[92mINFO [0m:      	Global Arrays:
+[92mINFO [0m:      		ArrayRecord (42.677 MB)
+[92mINFO [0m:      	
+[92mINFO [0m:      	Aggregated ClientApp-side Train Metrics:
+[92mINFO [0m:      	{ 1: { 'clipping_scale': '5.2591e-01',
+[92mINFO [0m:      	       'noise_std': '0.0000e+00',
+[92mINFO [0m:      	       'train_loss': '2.0147e+00',
+[92mINFO [0m:      	       'update_norm': '1.4261e+01'},
+[92mINFO [0m:      	  2: { 'clipping_scale': '6.3827e-01',
+[92mINFO [0m:      	       'noise_std': '0.0000e+00',
+[92mINFO [0m:      	       'train_loss': '1.8039e+00',
+[92mINFO [0m:      	       'update_norm': '1.1751e+01'},
+[92mINFO [0m:      	  3: { 'clipping_scale': '6.9537e-01',
+[92mINFO [0m:      	       'noise_std': '0.0000e+00',
+[92mINFO [0m:      	       'train_loss': '1.6038e+00',
+[92mINFO [0m:      	       'update_norm': '1.0786e+01'},
+[92mINFO [0m:      	  4: { 'clipping_scale': '7.2194e-01',
+[92mINFO [0m:      	       'noise_std': '0.0000e+00',
+[92mINFO [0m:      	       'train_loss': '1.4019e+00',
+[92mINFO [0m:      	       'update_norm': '1.0389e+01'},
+[92mINFO [0m:      	  5: { 'clipping_scale': '7.4850e-01',
+[92mINFO [0m:      	       'noise_std': '0.0000e+00',
+[92mINFO [0m:      	       'train_loss': '1.2392e+00',
+[92mINFO [0m:      	       'update_norm': '1.0020e+01'}}
+[92mINFO [0m:      	
+[92mINFO [0m:      	Aggregated ClientApp-side Evaluate Metrics:
+[92mINFO [0m:      	{}
+[92mINFO [0m:      	
+[92mINFO [0m:      	ServerApp-side Evaluate Metrics:
+[92mINFO [0m:      	{ 0: {'accuracy': '1.0000e-01', 'loss': '2.9329e+00'},
+[92mINFO [0m:      	  1: {'accuracy': '1.0000e-01', 'loss': '2.3387e+00'},
+[92mINFO [0m:      	  2: {'accuracy': '1.6110e-01', 'loss': '2.2195e+00'},
+[92mINFO [0m:      	  3: {'accuracy': '3.0080e-01', 'loss': '1.9434e+00'},
+[92mINFO [0m:      	  4: {'accuracy': '5.3300e-01', 'loss': '1.2763e+00'},
+[92mINFO [0m:      	  5: {'accuracy': '6.1750e-01', 'loss': '1.0628e+00'}}
+[92mINFO [0m:      
+
+Saving final model to disk...
+[36m(ClientAppActor pid=31378)[0m [2026-06-14 20:16:28,441 E 31378 31551] core_worker_process.cc:825: Failed to establish connection to the metrics exporter agent. Metrics will not be exported. Exporter agent status: RpcError: Running out of retries to initialize the metrics agent. rpc_code: 14[32m [repeated 5x across cluster][0m
+[92mINFO [0m:      

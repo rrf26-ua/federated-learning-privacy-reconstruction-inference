@@ -1,0 +1,25 @@
+\begin{table}[H]
+\centering
+\caption{Comparación final entre FedAvg y FedSGD en términos de utilidad, reconstrucción e inferencia de etiquetas.}
+\label{tab:fedavg_fedsgd_privacy_utility}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccccc}
+\toprule
+\textbf{Algoritmo} &
+\textbf{Acc. sin def.} &
+\textbf{Acc. con def.} &
+\textbf{PSNR sin def.} &
+\textbf{PSNR con def.} &
+\textbf{Caída PSNR} &
+\textbf{Etiq. sin def.} &
+\textbf{Etiq. con def.} \\
+\midrule
+FedAvg & 83.96\% & 83.00\% & 28.35 dB & 13.51 dB & 14.84 dB & 5/5 & 5/5 \\
+FedSGD & 54.75\% & No evaluada & 27.41 dB & 15.94 dB & 11.47 dB & 5/5 & 5/5 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\noindent
+En FedAvg, la defensa corresponde a una ejecución federada completa con clipping $C=7.5$ y ruido gaussiano $\sigma=0.002$. En FedSGD, la accuracy con defensa no se evaluó mediante un entrenamiento federado completo; la defensa se aplicó sobre el update observado durante el ataque de reconstrucción. En las muestras FedSGD evaluadas, el umbral $C=7.5$ no activó el clipping, por lo que la reducción de PSNR se atribuye principalmente al ruido gaussiano.

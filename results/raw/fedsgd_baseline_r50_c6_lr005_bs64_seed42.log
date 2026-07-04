@@ -1,0 +1,549 @@
+🎊 Successfully started run 14734600643941042915
+[92mINFO [0m:      Starting Flower Simulation
+Successfully installed quickstart-pytorch to /home/rruiz/.flwr/apps/flwrlabs.quickstart-pytorch.1.1.1.1184ea33.
+[INFO] Federated algorithm mode: fedsgd
+[93mWARNING [0m:   fraction_evaluate is set to 0.0. Federated evaluation will be skipped.
+[92mINFO [0m:      Starting FedAvg strategy:
+[92mINFO [0m:      	├── Number of rounds: 50
+[92mINFO [0m:      	├── ArrayRecord (42.68 MB)
+[92mINFO [0m:      	├── ConfigRecord (train): {'lr': 0.05}
+[92mINFO [0m:      	├── ConfigRecord (evaluate): (empty!)
+[92mINFO [0m:      	├──> Sampling:
+[92mINFO [0m:      	│	├──Fraction: train (1.00) | evaluate ( 0.00)
+[92mINFO [0m:      	│	├──Minimum nodes: train (1) | evaluate (0)
+[92mINFO [0m:      	│	└──Minimum available nodes: 1
+[92mINFO [0m:      	└──> Keys in records:
+[92mINFO [0m:      		├── Weighted by: 'num-examples'
+[92mINFO [0m:      		├── ArrayRecord key: 'arrays'
+[92mINFO [0m:      		└── ConfigRecord key: 'config'
+[92mINFO [0m:      
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/home/rruiz/Privacy-and-Security-Evaluation-of-Federated-Learning/.venv/lib/python3.12/site-packages/ray/_private/worker.py:2051: FutureWarning: Tip: In future versions of Ray, Ray will no longer override accelerator visible devices env var if num_gpus=0 or num_gpus=None (default). To enable this behavior and turn off this error message, set RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO=0
+  warnings.warn(
+Server-side evaluation round 0: loss=2.9329, accuracy=0.1000
+[92mINFO [0m:      Initial global evaluation results: {'accuracy': 0.1, 'loss': 2.9328789893229295}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 1/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[36m(ClientAppActor pid=8428)[0m Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.375646800480817}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 1: loss=2.3253, accuracy=0.1017
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.1017, 'loss': 2.3253101482512846}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 2/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[36m(pid=gcs_server)[0m [2026-06-14 14:45:40,286 E 7750 7750] (gcs_server) gcs_server.cc:302: Failed to establish connection to the event+metrics exporter agent. Events and metrics will not be exported. Exporter agent status: RpcError: Running out of retries to initialize the metrics agent. rpc_code: 14
+[36m(ClientAppActor pid=8426)[0m Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.[32m [repeated 2x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)[0m
+[33m(raylet)[0m [2026-06-14 14:45:41,036 E 7979 7979] (raylet) main.cc:975: Failed to establish connection to the metrics exporter agent. Metrics will not be exported. Exporter agent status: RpcError: Running out of retries to initialize the metrics agent. rpc_code: 14
+[36m(pid=8067)[0m [2026-06-14 14:45:41,428 E 8067 8237] core_worker_process.cc:825: Failed to establish connection to the metrics exporter agent. Metrics will not be exported. Exporter agent status: RpcError: Running out of retries to initialize the metrics agent. rpc_code: 14
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.3137831671952402}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 2: loss=2.2794, accuracy=0.1277
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.1277, 'loss': 2.2794258731186012}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 3/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.269762200792764}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 3: loss=2.2554, accuracy=0.1550
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.155, 'loss': 2.2553819121828504}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 4/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.250547689499572}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 4: loss=2.2313, accuracy=0.1590
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.159, 'loss': 2.2312891209960743}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 5/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.2286387460757164}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 5: loss=2.2198, accuracy=0.1721
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.1721, 'loss': 2.2197771953169707}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 6/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.2156259405224903}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 6: loss=2.1965, accuracy=0.1771
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.1771, 'loss': 2.1965467565378565}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 7/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.1968101030516918}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 7: loss=2.1902, accuracy=0.1829
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.1829, 'loss': 2.1902383694982834}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 8/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.186473703234188}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 8: loss=2.1672, accuracy=0.1925
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.1925, 'loss': 2.1672387669800193}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 9/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.168690658806622}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 9: loss=2.1646, accuracy=0.1884
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.1884, 'loss': 2.1645638289724944}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 10/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.160464365247834}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 10: loss=2.1446, accuracy=0.2085
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2085, 'loss': 2.1446201315351354}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 11/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.144912859732952}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 11: loss=2.1434, accuracy=0.1910
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.191, 'loss': 2.1434127722576166}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 12/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.1359401471889394}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 12: loss=2.1279, accuracy=0.2217
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2217, 'loss': 2.127938981268816}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 13/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.1257784809730755}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 13: loss=2.1226, accuracy=0.1945
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.1945, 'loss': 2.122586961005144}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 14/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.1089484297136614}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 14: loss=2.1101, accuracy=0.2345
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2345, 'loss': 2.1100628125439784}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 15/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.106310364031614}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 15: loss=2.0992, accuracy=0.1998
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.1998, 'loss': 2.0992078811499724}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 16/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.0810876763148918}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 16: loss=2.0888, accuracy=0.2444
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2444, 'loss': 2.0888403585761974}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 17/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.084783440631916}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 17: loss=2.0743, accuracy=0.2085
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2085, 'loss': 2.0743290899665494}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 18/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.0560331854368905}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 18: loss=2.0647, accuracy=0.2450
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.245, 'loss': 2.064658639537301}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 19/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.0610942929272316}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 19: loss=2.0499, accuracy=0.2173
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2173, 'loss': 2.0498534099311585}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 20/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.032769656585475}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 20: loss=2.0385, accuracy=0.2477
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2477, 'loss': 2.038513951240831}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 21/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.0349099100920625}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 21: loss=2.0233, accuracy=0.2242
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2242, 'loss': 2.0232627490523516}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 22/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.008901213531441}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 22: loss=2.0113, accuracy=0.2506
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2506, 'loss': 2.0113237898820526}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 23/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 2.008305877797323}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 23: loss=1.9969, accuracy=0.2333
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2333, 'loss': 1.9969481320897484}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 24/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.9854199220981708}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 24: loss=1.9864, accuracy=0.2559
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2559, 'loss': 1.9863718626605478}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 25/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.9834271894525817}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 25: loss=1.9726, accuracy=0.2417
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2417, 'loss': 1.9726288121217375}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 26/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.9637459787799572}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 26: loss=1.9646, accuracy=0.2598
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2598, 'loss': 1.9645625960295368}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 27/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.9607829227883362}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 27: loss=1.9513, accuracy=0.2493
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2493, 'loss': 1.951280154999654}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 28/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.9442245237433533}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 28: loss=1.9457, accuracy=0.2627
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2627, 'loss': 1.9456866478464405}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 29/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.94053121373453}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 29: loss=1.9333, accuracy=0.2571
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2571, 'loss': 1.9332774573830283}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 30/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.927247280704718}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 30: loss=1.9299, accuracy=0.2658
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2658, 'loss': 1.9299352852402218}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 31/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.9231732506425125}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 31: loss=1.9179, accuracy=0.2633
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2633, 'loss': 1.917863055399269}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 32/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.912896190454283}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 32: loss=1.9178, accuracy=0.2681
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2681, 'loss': 1.9177762687585915}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 33/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.9081582705481863}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 33: loss=1.9035, accuracy=0.2723
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2723, 'loss': 1.9035362483589513}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 34/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.9002356513260994}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 34: loss=1.9065, accuracy=0.2738
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2738, 'loss': 1.9064540650434554}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 35/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.8944064580510216}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 35: loss=1.8912, accuracy=0.2802
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2802, 'loss': 1.8911604668684066}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 36/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.8880749760678341}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 36: loss=1.8961, accuracy=0.2773
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2773, 'loss': 1.896112397977501}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 37/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.881289827888611}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 37: loss=1.8781, accuracy=0.2858
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2858, 'loss': 1.8780744599688584}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 38/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.8755390533084089}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 38: loss=1.8848, accuracy=0.2800
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.28, 'loss': 1.884763502770928}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 39/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.867785367722976}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 39: loss=1.8643, accuracy=0.2926
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2926, 'loss': 1.864348395614867}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 40/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.8621581762968}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 40: loss=1.8724, accuracy=0.2847
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2847, 'loss': 1.8723805444255757}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 41/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.8538743115477614}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 41: loss=1.8506, accuracy=0.2982
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2982, 'loss': 1.8506188050956482}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 42/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.848388201833111}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 42: loss=1.8591, accuracy=0.2904
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2904, 'loss': 1.8591173135550918}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 43/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.839926170417026}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 43: loss=1.8378, accuracy=0.3028
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.3028, 'loss': 1.8377897557179639}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 44/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.8347217722042566}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 44: loss=1.8463, accuracy=0.2976
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2976, 'loss': 1.8462885185411781}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 45/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.8262976818522474}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 45: loss=1.8252, accuracy=0.3070
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.307, 'loss': 1.8252137390671261}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 46/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.8215999387253452}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 46: loss=1.8354, accuracy=0.3025
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.3025, 'loss': 1.8354495118378074}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 47/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.813051271917844}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 47: loss=1.8143, accuracy=0.3105
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.3105, 'loss': 1.8142894536826262}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 48/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.8094278958161012}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 48: loss=1.8272, accuracy=0.3059
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.3059, 'loss': 1.8272178226215825}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 49/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.8008226569852055}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 49: loss=1.8049, accuracy=0.3128
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.3128, 'loss': 1.8049492790440844}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 50/50]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 6)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.7985010897197082}
+[92mINFO [0m:      Global evaluation
+Server-side evaluation round 50: loss=1.8200, accuracy=0.3088
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.3088, 'loss': 1.8200036135448772}
+[92mINFO [0m:      
+[92mINFO [0m:      Strategy execution finished in 896.51s
+[92mINFO [0m:      
+[92mINFO [0m:      Final results:
+[92mINFO [0m:      
+[92mINFO [0m:      	Global Arrays:
+[92mINFO [0m:      		ArrayRecord (42.677 MB)
+[92mINFO [0m:      	
+[92mINFO [0m:      	Aggregated ClientApp-side Train Metrics:
+[92mINFO [0m:      	{ 1: {'train_loss': '2.3756e+00'},
+[92mINFO [0m:      	  2: {'train_loss': '2.3138e+00'},
+[92mINFO [0m:      	  3: {'train_loss': '2.2698e+00'},
+[92mINFO [0m:      	  4: {'train_loss': '2.2505e+00'},
+[92mINFO [0m:      	  5: {'train_loss': '2.2286e+00'},
+[92mINFO [0m:      	  6: {'train_loss': '2.2156e+00'},
+[92mINFO [0m:      	  7: {'train_loss': '2.1968e+00'},
+[92mINFO [0m:      	  8: {'train_loss': '2.1865e+00'},
+[92mINFO [0m:      	  9: {'train_loss': '2.1687e+00'},
+[92mINFO [0m:      	  10: {'train_loss': '2.1605e+00'},
+[92mINFO [0m:      	  11: {'train_loss': '2.1449e+00'},
+[92mINFO [0m:      	  12: {'train_loss': '2.1359e+00'},
+[92mINFO [0m:      	  13: {'train_loss': '2.1258e+00'},
+[92mINFO [0m:      	  14: {'train_loss': '2.1089e+00'},
+[92mINFO [0m:      	  15: {'train_loss': '2.1063e+00'},
+[92mINFO [0m:      	  16: {'train_loss': '2.0811e+00'},
+[92mINFO [0m:      	  17: {'train_loss': '2.0848e+00'},
+[92mINFO [0m:      	  18: {'train_loss': '2.0560e+00'},
+[92mINFO [0m:      	  19: {'train_loss': '2.0611e+00'},
+[92mINFO [0m:      	  20: {'train_loss': '2.0328e+00'},
+[92mINFO [0m:      	  21: {'train_loss': '2.0349e+00'},
+[92mINFO [0m:      	  22: {'train_loss': '2.0089e+00'},
+[92mINFO [0m:      	  23: {'train_loss': '2.0083e+00'},
+[92mINFO [0m:      	  24: {'train_loss': '1.9854e+00'},
+[92mINFO [0m:      	  25: {'train_loss': '1.9834e+00'},
+[92mINFO [0m:      	  26: {'train_loss': '1.9637e+00'},
+[92mINFO [0m:      	  27: {'train_loss': '1.9608e+00'},
+[92mINFO [0m:      	  28: {'train_loss': '1.9442e+00'},
+[92mINFO [0m:      	  29: {'train_loss': '1.9405e+00'},
+[92mINFO [0m:      	  30: {'train_loss': '1.9272e+00'},
+[92mINFO [0m:      	  31: {'train_loss': '1.9232e+00'},
+[92mINFO [0m:      	  32: {'train_loss': '1.9129e+00'},
+[92mINFO [0m:      	  33: {'train_loss': '1.9082e+00'},
+[92mINFO [0m:      	  34: {'train_loss': '1.9002e+00'},
+[92mINFO [0m:      	  35: {'train_loss': '1.8944e+00'},
+[92mINFO [0m:      	  36: {'train_loss': '1.8881e+00'},
+[92mINFO [0m:      	  37: {'train_loss': '1.8813e+00'},
+[92mINFO [0m:      	  38: {'train_loss': '1.8755e+00'},
+[92mINFO [0m:      	  39: {'train_loss': '1.8678e+00'},
+[92mINFO [0m:      	  40: {'train_loss': '1.8622e+00'},
+[92mINFO [0m:      	  41: {'train_loss': '1.8539e+00'},
+[92mINFO [0m:      	  42: {'train_loss': '1.8484e+00'},
+[92mINFO [0m:      	  43: {'train_loss': '1.8399e+00'},
+[92mINFO [0m:      	  44: {'train_loss': '1.8347e+00'},
+[92mINFO [0m:      	  45: {'train_loss': '1.8263e+00'},
+[92mINFO [0m:      	  46: {'train_loss': '1.8216e+00'},
+[92mINFO [0m:      	  47: {'train_loss': '1.8131e+00'},
+[92mINFO [0m:      	  48: {'train_loss': '1.8094e+00'},
+[92mINFO [0m:      	  49: {'train_loss': '1.8008e+00'},
+[92mINFO [0m:      	  50: {'train_loss': '1.7985e+00'}}
+[92mINFO [0m:      	
+[92mINFO [0m:      	Aggregated ClientApp-side Evaluate Metrics:
+[92mINFO [0m:      	{}
+[92mINFO [0m:      	
+[92mINFO [0m:      	ServerApp-side Evaluate Metrics:
+[92mINFO [0m:      	{ 0: {'accuracy': '1.0000e-01', 'loss': '2.9329e+00'},
+[92mINFO [0m:      	  1: {'accuracy': '1.0170e-01', 'loss': '2.3253e+00'},
+[92mINFO [0m:      	  2: {'accuracy': '1.2770e-01', 'loss': '2.2794e+00'},
+[92mINFO [0m:      	  3: {'accuracy': '1.5500e-01', 'loss': '2.2554e+00'},
+[92mINFO [0m:      	  4: {'accuracy': '1.5900e-01', 'loss': '2.2313e+00'},
+[92mINFO [0m:      	  5: {'accuracy': '1.7210e-01', 'loss': '2.2198e+00'},
+[92mINFO [0m:      	  6: {'accuracy': '1.7710e-01', 'loss': '2.1965e+00'},
+[92mINFO [0m:      	  7: {'accuracy': '1.8290e-01', 'loss': '2.1902e+00'},
+[92mINFO [0m:      	  8: {'accuracy': '1.9250e-01', 'loss': '2.1672e+00'},
+[92mINFO [0m:      	  9: {'accuracy': '1.8840e-01', 'loss': '2.1646e+00'},
+[92mINFO [0m:      	  10: {'accuracy': '2.0850e-01', 'loss': '2.1446e+00'},
+[92mINFO [0m:      	  11: {'accuracy': '1.9100e-01', 'loss': '2.1434e+00'},
+[92mINFO [0m:      	  12: {'accuracy': '2.2170e-01', 'loss': '2.1279e+00'},
+[92mINFO [0m:      	  13: {'accuracy': '1.9450e-01', 'loss': '2.1226e+00'},
+[92mINFO [0m:      	  14: {'accuracy': '2.3450e-01', 'loss': '2.1101e+00'},
+[92mINFO [0m:      	  15: {'accuracy': '1.9980e-01', 'loss': '2.0992e+00'},
+[92mINFO [0m:      	  16: {'accuracy': '2.4440e-01', 'loss': '2.0888e+00'},
+[92mINFO [0m:      	  17: {'accuracy': '2.0850e-01', 'loss': '2.0743e+00'},
+[92mINFO [0m:      	  18: {'accuracy': '2.4500e-01', 'loss': '2.0647e+00'},
+[92mINFO [0m:      	  19: {'accuracy': '2.1730e-01', 'loss': '2.0499e+00'},
+[92mINFO [0m:      	  20: {'accuracy': '2.4770e-01', 'loss': '2.0385e+00'},
+[92mINFO [0m:      	  21: {'accuracy': '2.2420e-01', 'loss': '2.0233e+00'},
+[92mINFO [0m:      	  22: {'accuracy': '2.5060e-01', 'loss': '2.0113e+00'},
+[92mINFO [0m:      	  23: {'accuracy': '2.3330e-01', 'loss': '1.9969e+00'},
+[92mINFO [0m:      	  24: {'accuracy': '2.5590e-01', 'loss': '1.9864e+00'},
+[92mINFO [0m:      	  25: {'accuracy': '2.4170e-01', 'loss': '1.9726e+00'},
+[92mINFO [0m:      	  26: {'accuracy': '2.5980e-01', 'loss': '1.9646e+00'},
+[92mINFO [0m:      	  27: {'accuracy': '2.4930e-01', 'loss': '1.9513e+00'},
+[92mINFO [0m:      	  28: {'accuracy': '2.6270e-01', 'loss': '1.9457e+00'},
+[92mINFO [0m:      	  29: {'accuracy': '2.5710e-01', 'loss': '1.9333e+00'},
+[92mINFO [0m:      	  30: {'accuracy': '2.6580e-01', 'loss': '1.9299e+00'},
+[92mINFO [0m:      	  31: {'accuracy': '2.6330e-01', 'loss': '1.9179e+00'},
+[92mINFO [0m:      	  32: {'accuracy': '2.6810e-01', 'loss': '1.9178e+00'},
+[92mINFO [0m:      	  33: {'accuracy': '2.7230e-01', 'loss': '1.9035e+00'},
+[92mINFO [0m:      	  34: {'accuracy': '2.7380e-01', 'loss': '1.9065e+00'},
+[92mINFO [0m:      	  35: {'accuracy': '2.8020e-01', 'loss': '1.8912e+00'},
+[92mINFO [0m:      	  36: {'accuracy': '2.7730e-01', 'loss': '1.8961e+00'},
+[92mINFO [0m:      	  37: {'accuracy': '2.8580e-01', 'loss': '1.8781e+00'},
+[92mINFO [0m:      	  38: {'accuracy': '2.8000e-01', 'loss': '1.8848e+00'},
+[92mINFO [0m:      	  39: {'accuracy': '2.9260e-01', 'loss': '1.8643e+00'},
+[92mINFO [0m:      	  40: {'accuracy': '2.8470e-01', 'loss': '1.8724e+00'},
+[92mINFO [0m:      	  41: {'accuracy': '2.9820e-01', 'loss': '1.8506e+00'},
+[92mINFO [0m:      	  42: {'accuracy': '2.9040e-01', 'loss': '1.8591e+00'},
+[92mINFO [0m:      	  43: {'accuracy': '3.0280e-01', 'loss': '1.8378e+00'},
+[92mINFO [0m:      	  44: {'accuracy': '2.9760e-01', 'loss': '1.8463e+00'},
+[92mINFO [0m:      	  45: {'accuracy': '3.0700e-01', 'loss': '1.8252e+00'},
+[92mINFO [0m:      	  46: {'accuracy': '3.0250e-01', 'loss': '1.8354e+00'},
+[92mINFO [0m:      	  47: {'accuracy': '3.1050e-01', 'loss': '1.8143e+00'},
+[92mINFO [0m:      	  48: {'accuracy': '3.0590e-01', 'loss': '1.8272e+00'},
+[92mINFO [0m:      	  49: {'accuracy': '3.1280e-01', 'loss': '1.8049e+00'},
+[92mINFO [0m:      	  50: {'accuracy': '3.0880e-01', 'loss': '1.8200e+00'}}
+[92mINFO [0m:      
+
+Saving final model to disk...
+[36m(ClientAppActor pid=8426)[0m [2026-06-14 14:45:42,171 E 8426 8602] core_worker_process.cc:825: Failed to establish connection to the metrics exporter agent. Metrics will not be exported. Exporter agent status: RpcError: Running out of retries to initialize the metrics agent. rpc_code: 14[32m [repeated 5x across cluster][0m
+[92mINFO [0m:      

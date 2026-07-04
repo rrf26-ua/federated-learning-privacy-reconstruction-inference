@@ -1,0 +1,5 @@
+local_steps,batch_size,sample_indices,labels,grad_scope,iterations,local_lr,weight_decay,attack_lr,tv_weight,best_update_mse,best_update_psnr,best_oracle_mse,best_oracle_psnr,final_mse,final_psnr,elapsed_seconds,visual_observation
+1,1,"0","airplane",all,2000,0.02,0.0005,0.03,0.000001,0.018245665356516838,17.388402947879598,0.01819773204624653,17.399827340574948,0.018195131793618202,17.40044794321558,70.76481699943542,"Strong reconstruction from one local SGD step."
+2,1,"0","airplane",all,2000,0.02,0.0005,0.03,0.000001,0.01909390,17.19,0.01892165,17.23,0.01922061,17.16,144.13,"Reconstruction remains strong; computational cost approximately doubles."
+5,1,"0","airplane",all,2000,0.02,0.0005,0.03,0.000001,0.02657520,15.76,0.02188455,16.60,0.02197371,16.58,351.41,"Some degradation, but visual leakage remains clearly present."
+10,1,"0","airplane",all,2000,0.02,0.0005,0.03,0.000001,0.01938688,17.12,0.01893913,17.23,0.01893453,17.23,645.82,"Reconstruction remains strong despite the accumulated multi-step update; degradation is not monotonic."

@@ -1,0 +1,9 @@
+config,defense,clip_norm,noise_std,eval_rounds_parsed,train_rounds_parsed,final_round,final_accuracy,best_accuracy,final_loss,best_loss,mean_update_norm,final_update_norm,mean_clipping_scale,final_clipping_scale,log_path,accuracy_drop_vs_none
+fedsgd_defutil_r50_none,none,0.0,0.0,51,50,50,0.2955,0.2955,1.8844,1.8844,0.028534,0.003077,1.0,1.0,results/raw/fedsgd_defutil_r50_none.log,0.0
+fedsgd_defutil_r50_clip_c005,clipping,0.05,0.0,51,50,50,0.2938,0.2941,1.8898,1.8898,0.021185,0.003089,0.987824,1.0,results/raw/fedsgd_defutil_r50_clip_c005.log,0.0017
+fedsgd_defutil_r50_clip_c001,clipping,0.01,0.0,51,50,50,0.2283,0.2283,2.0964,2.0964,0.02627,0.003599,0.579861,1.0,results/raw/fedsgd_defutil_r50_clip_c001.log,0.0672
+fedsgd_defutil_r50_noise_s000001,noise,0.0,1e-05,51,50,50,0.2953,0.2953,1.8844,1.8844,0.028514,0.003072,1.0,1.0,results/raw/fedsgd_defutil_r50_noise_s000001.log,0.0002
+fedsgd_defutil_r50_noise_s000005,noise,0.0,5e-05,51,50,50,0.2938,0.2938,1.8849,1.8849,0.02848,0.003076,1.0,1.0,results/raw/fedsgd_defutil_r50_noise_s000005.log,0.0017
+fedsgd_defutil_r50_clip_c005_noise_s000001,clipping_noise,0.05,1e-05,51,50,50,0.2926,0.2932,1.89,1.89,0.021182,0.003093,0.987828,1.0,results/raw/fedsgd_defutil_r50_clip_c005_noise_s000001.log,0.0029
+fedsgd_defutil_r50_clip_c005_noise_s000005,clipping_noise,0.05,5e-05,51,50,50,0.291,0.292,1.8906,1.8906,0.021172,0.003093,0.987836,1.0,results/raw/fedsgd_defutil_r50_clip_c005_noise_s000005.log,0.0045
+fedsgd_defutil_r50_noise_s0002_extreme,noise_extreme,0.0,0.002,51,50,50,0.2307,0.2547,2.0612,1.9995,0.029099,0.005325,1.0,1.0,results/raw/fedsgd_defutil_r50_noise_s0002_extreme.log,0.0648

@@ -1,0 +1,5 @@
+batch_size,num_runs,num_reconstructed_images,mean_run_final_psnr,std_run_final_psnr,min_run_final_psnr,max_run_final_psnr,mean_sample_final_psnr,std_sample_final_psnr,mean_best_update_psnr,mean_best_oracle_psnr,mean_elapsed_seconds,label_inference
+1,5,5,27.1877,6.3855,19.204,35.141,27.1877,6.3855,27.1658,27.6373,65.32,5/5
+2,5,10,14.0247,3.1565,10.2177,17.5923,15.1034,4.4606,13.938,14.1759,67.01,N/A
+4,5,20,12.2783,0.8826,11.0327,13.1349,13.1041,2.7784,12.2065,12.2809,67.61,N/A
+8,5,40,10.7061,0.1454,10.5954,10.8896,11.1812,2.1264,10.6934,10.737,70.14,N/A

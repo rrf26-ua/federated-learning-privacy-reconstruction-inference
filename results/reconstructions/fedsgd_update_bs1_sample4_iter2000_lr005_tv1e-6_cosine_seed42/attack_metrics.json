@@ -1,0 +1,83 @@
+{
+  "attack": "local_update_inversion",
+  "dataset": "CIFAR-10",
+  "split": "train",
+  "sample_start": 4,
+  "sample_indices": [
+    4
+  ],
+  "batch_size": 1,
+  "model": "ResNet-18 adapted for CIFAR-10",
+  "model_path": null,
+  "grad_scope": "all",
+  "matching_loss": "cosine",
+  "observed_defense": "none",
+  "observed_clip_norm": 0.0,
+  "observed_noise_std": 0.0,
+  "observed_noise_seed": 12345,
+  "observed_raw_update_norm": 3.521061658859253,
+  "observed_defended_update_norm": 3.521061658859253,
+  "observed_clipping_scale": 1.0,
+  "iterations": 2000,
+  "attack_lr": 0.03,
+  "tv_weight": 1e-06,
+  "local_lr": 0.05,
+  "weight_decay": 0.0005,
+  "labels": [
+    7
+  ],
+  "label_names": [
+    "horse"
+  ],
+  "uses_true_labels": true,
+  "inferred_label_from_update": 7,
+  "inferred_label_from_update_name": "horse",
+  "true_loss": 3.5956223011016846,
+  "best_update_loss": 0.004384636878967285,
+  "best_update_iteration": 1947,
+  "best_update_mse": 0.0009027114138007164,
+  "best_update_psnr": 30.444510663257553,
+  "best_oracle_iteration": 1993,
+  "best_oracle_mse": 0.0007039509364403784,
+  "best_oracle_psnr": 31.52457609005255,
+  "final_mse": 0.000718511815648526,
+  "final_psnr": 31.435660856664818,
+  "per_sample": [
+    {
+      "sample_index": 4,
+      "true_label": 7,
+      "true_label_name": "horse",
+      "mse": 0.0009027114138007164,
+      "psnr": 30.444510663257553
+    }
+  ],
+  "per_sample_best_update": [
+    {
+      "sample_index": 4,
+      "true_label": 7,
+      "true_label_name": "horse",
+      "mse": 0.0009027114138007164,
+      "psnr": 30.444510663257553
+    }
+  ],
+  "per_sample_best_oracle": [
+    {
+      "sample_index": 4,
+      "true_label": 7,
+      "true_label_name": "horse",
+      "mse": 0.0007039509364403784,
+      "psnr": 31.52457609005255
+    }
+  ],
+  "per_sample_final": [
+    {
+      "sample_index": 4,
+      "true_label": 7,
+      "true_label_name": "horse",
+      "mse": 0.000718511815648526,
+      "psnr": 31.435660856664818
+    }
+  ],
+  "elapsed_seconds": 64.19194006919861,
+  "device": "cuda:0"
+}

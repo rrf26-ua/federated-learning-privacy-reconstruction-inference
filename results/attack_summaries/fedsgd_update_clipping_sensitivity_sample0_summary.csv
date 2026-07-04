@@ -1,0 +1,4 @@
+algorithm,sample,defense,clip_norm,raw_update_norm,defended_update_norm,clipping_scale,best_update_psnr,best_oracle_psnr,final_psnr,output_dir
+FedSGD,0,clipping_c1.0,1.0,2.0310919284820557,0.9999999403953552,0.49234600658713734,35.22330721155808,36.238953863713284,34.3446267494614,results/reconstructions/fedsgd_update_clipping_c1.0_bs1_sample0_iter2000_lr005_tv1e-6_cosine_seed42
+FedSGD,0,clipping_c0.6,0.6,2.0310916900634766,0.6000000834465027,0.29540763862854125,35.79766902105993,35.89196242844399,34.13603969524766,results/reconstructions/fedsgd_update_clipping_c0.6_bs1_sample0_iter2000_lr005_tv1e-6_cosine_seed42
+FedSGD,0,clipping_c0.3,0.3,2.0310916900634766,0.30000004172325134,0.14770381931427062,35.82916446025408,36.52747549924118,34.74028747932381,results/reconstructions/fedsgd_update_clipping_c0.3_bs1_sample0_iter2000_lr005_tv1e-6_cosine_seed42

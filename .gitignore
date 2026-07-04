@@ -15,3 +15,31 @@ final_model.pt
 *.pt
 final_model.pt
 *.pt
+results/reconstructions/
+
+# Local dataset cache
+data/
+
+# Local archives generated for review/memory sharing
+*.tgz
+*.tar.gz
+*.zip
+
+# Runtime logs
+logs/
+results/raw/*.log
+
+# Python/cache/model artifacts
+.venv/
+venv/
+__pycache__/
+*.pyc
+.env
+.cache/
+*.pt
+*.pth
+*.ckpt
+models/
+checkpoints/
+data/
+datasets/

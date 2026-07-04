@@ -1,0 +1,5 @@
+batch_size,sample_indices,labels,uses_true_labels,final_mse,final_psnr,elapsed_seconds,visual_observation
+1,"0","airplane",true,0.01884104683995247,17.248949707477927,63.18678832054138,"Best individual reconstruction; dominant colors and structure visible."
+2,"0,1","airplane,frog",true,0.06239691004157066,12.048369164894035,64.85207104682922,"Mixed reconstruction; sample 0 remains partially visible, sample 1 is weak/noisy."
+4,"0,1,2,3","airplane,frog,airplane,bird",true,0.09659627825021744,10.150396061572915,67.59055685997009,"Clearly degraded reconstruction; individual images are noisy and mixed."
+8,"0,1,2,3,4,5,6,7","airplane,frog,airplane,bird,horse,bird,automobile,bird",true,0.08305294,10.81,70.93,"Noisy aggregate reconstruction; individual identity remains degraded, although some global visual cues may remain."

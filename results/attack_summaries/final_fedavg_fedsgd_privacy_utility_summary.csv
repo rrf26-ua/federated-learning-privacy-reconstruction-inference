@@ -1,0 +1,3 @@
+algorithm,accuracy_no_defense,accuracy_with_defense,psnr_no_defense,psnr_with_defense,psnr_drop,label_inference_no_defense,label_inference_with_defense,note
+FedAvg,83.96%,83.00%,28.35 dB,13.51 dB,14.84 dB,5/5,5/5,"Defensa entrenada y evaluada. C=7.5, sigma=0.002."
+FedSGD,54.75%,No evaluada,27.41 dB,15.94 dB,11.47 dB,5/5,5/5,Defensa aplicada al update observado. C=7.5 no activa clipping en batch size 1; la mitigación procede principalmente del ruido.

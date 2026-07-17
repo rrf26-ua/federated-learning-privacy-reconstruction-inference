@@ -7,6 +7,52 @@ This repository contains the implementation, experiments, scripts, and result su
 The project studies privacy leakage in federated learning for image classification, focusing on reconstruction attacks and label inference from gradients and local model updates.
 
 ## Overview
+## Key visual result
+
+A local model update can reveal highly recognizable information about a
+client's training image. The reconstruction becomes substantially less
+informative when clipping and Gaussian noise are applied.
+
+<p align="center">
+  <a href="./docs/images/reconstruction_comparison_samples0_4_final.png">
+    <img
+      src="./docs/images/reconstruction_comparison_samples0_4_final.png"
+      alt="Original CIFAR-10 images, reconstructions without defense, and reconstructions with clipping and Gaussian noise"
+      width="900"
+    />
+  </a>
+</p>
+
+<p align="center">
+  <em>
+    Click the figure to view it at full resolution. Columns compare the
+    original image, reconstruction without defense, and reconstruction after
+    applying empirical clipping and Gaussian-noise defenses.
+  </em>
+</p>
+
+## Attack and defense progression
+
+<p align="center">
+  <img
+    src="./docs/images/fedavg_sample0_progression_none_vs_clipnoise.png"
+    alt="Evolution of a local-update reconstruction attack with and without defenses"
+    width="900"
+  />
+</p>
+
+The undefended update progressively reveals the original image, whereas the
+defended signal remains visually uninformative under the evaluated setup.
+
+## Defense ablation
+
+<p align="center">
+  <img
+    src="./docs/images/defense_ablation_visual_sample0.png"
+    alt="Visual ablation of clipping and Gaussian-noise defenses"
+    width="900"
+  />
+</p>
 
 Federated learning reduces the need to centralize training data, but the gradients and model updates exchanged during training may still leak information about client data. This repository evaluates that risk experimentally using CIFAR-10, PyTorch, Flower, and a ResNet-18 adapted to CIFAR-10.
 
